@@ -15,9 +15,7 @@
                             <div class="ibox-tools"></div>
                         </div>
                         <div class="ibox-content">
-
                             <form class="form-horizontal" @submit.prevent="updateData">
-
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">小区名称：</label>
 
@@ -29,29 +27,53 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">小区城市：</label>
-
                                     <div class="col-sm-10">
                                         <select class="form-control" v-model="data.city_id">
-                                            <option v-for="city in categories" :value="city.id">
+                                            <option v-for="city in citys" :value="city.id">
                                                 {{city.name}}
                                             </option>
                                         </select>
                                         <label class="help-block error" v-if="errors">{{errors['city_id']}}</label>
                                     </div>
                                 </div>
-                                <!--<div class="hr-line-dashed"></div>
+                                <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">小区标签：</label>
-
+                                    <label class="col-sm-2 control-label">小区状态：</label>
                                     <div class="col-sm-10">
-                                        <select class="form-control" id="select2" multiple="multiple" style="display: none;">
-                                            <option v-for="tag in tags" :value="tag.id"
-                                                    :selected="inArray(initSelectedTds,tag.id)">
-                                                {{tag.name}}
+                                        <select class="form-control" v-model="data.status">
+                                            <option value="0">请选择</option>
+                                            <option v-for="sta in status" :value="sta.id">
+                                                {{sta.name}}
                                             </option>
                                         </select>
+                                        <label class="help-block error" v-if="errors">{{errors['status']}}</label>
                                     </div>
-                                </div>-->
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">小区地址：</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" @blur="onBlurMap"  class="form-control" v-model="data.address">
+                                        <label class="help-block error" v-if="errors">{{errors['addrsss']}}</label>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">纬度：</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" v-model="data.latitude">
+                                        <label class="help-block error" v-if="errors">{{errors['latitude']}}</label>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">经度：</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" v-model="data.longitude">
+                                        <label class="help-block error" v-if="errors">{{errors['longitude']}}</label>
+                                    </div>
+                                </div>
+
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">小区描述：</label>
@@ -106,12 +128,7 @@
             this.data.id = this.$route.params.id;
 
             this.getData().then(function () {
-                $('#select2').select2({
-                    placeholder: '选择标签',
-                    tags: true
-                }).on('change.select2', function () {
-                    vm.data.tagIds = ($('#select2').val());
-                }).trigger('change');
+
             });
 
         },
@@ -128,11 +145,17 @@
                         url: ''
                     }
                 ],
-                categories: [],
+                status:[],
+                citys: [],
                 tags: [],
                 data: {
                     title: '',
                     city_id: 0,
+                    status:1,
+                    address:'',
+                    latitude:'',
+                    longitude:'',
+                    cityName:'',
                     description: '',
                     tags: [],
                     tagIds: [],
@@ -158,14 +181,35 @@
             inArray: function (array, item) {
                 return Array.indexOf(array, item) > -1;
             },
+            onBlurMap:function(){
+                console.log(this.data.address);
+                let data = this.data;
+                let address = this.data.address;
+                // 创建地址解析器实例
+                let myGeo = new BMap.Geocoder();
+                // 将地址解析结果显示在地图上,并调整地图视野
+                console.log(data.cityName);
+                
+                myGeo.getPoint(address, function(point){
+                    if (point) {
+                        console.log(point)
+                        data.latitude = point.lat;
+                        data.longitude = point.lng;
+                    }else{
+                        alert("您选择地址没有解析到结果!");
+                    }
+                }, data.cityName);
+            },
             getData: function () {
                 return new Promise(function (resolve, reject) {
                     this.$http.get('house/' + this.data.id + '/edit').then(function (result) {
                         let data = result.data;
                         if (data.flag == true && data.data) {
                             this.data = extend(this.data, data.data);
-                            this.categories = data.categories;
+                            this.citys = data.citys;
                             this.tags = data.tags;
+                            this.status = data.status;
+
                         }
                         this.$toast['success'](data.msg);
                         resolve(result);

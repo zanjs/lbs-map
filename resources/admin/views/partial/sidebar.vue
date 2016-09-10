@@ -60,6 +60,17 @@
                         <li><a v-link="{name:'post_create'}">小区添加</a></li>
                     </ul>
                 </li>
+                 <li>
+                    <a>
+                        <i class="fa fa-leaf"></i>
+                        <span class="nav-label">状态</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li><a v-link="{name:'status_index'}">状态列表</a></li>
+                        <li><a v-link="{name:'status_create'}">状态添加</a></li>
+                    </ul>
+                </li>
                 <li>
                     <a>
                         <i class="fa fa-tag"></i>

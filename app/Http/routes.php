@@ -41,6 +41,8 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'backend','middleware'=>'api
     Route::post('logout', 'AuthController@postLogout');
     Route::post('upload', 'CommonController@upload');
 
+
+    Route::resource('status', 'StatusController');
     Route::group(['middleware' => ['jwt_token']], function () {
 
         Route::get('dashboard', 'DashboardController@index');

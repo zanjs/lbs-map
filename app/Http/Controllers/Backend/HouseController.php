@@ -11,6 +11,7 @@ use Validator;
 use App\House;
 use App\City;
 use App\Tag;
+use App\Status;
 
 class HouseController extends Controller
 {
@@ -35,9 +36,10 @@ class HouseController extends Controller
      */
     public function create()
     {
-        $categories = City::all();
+        $citys = City::all();
         $tags = Tag::all();
-        return response()->json(['flag' => true, 'categories' => $categories, 'tags' => $tags]);
+        $status = Status::all();
+        return response()->json(['flag' => true, 'citys' => $citys, 'tags' => $tags,'status' => $status]);
     }
 
     /**
@@ -52,7 +54,6 @@ class HouseController extends Controller
         $hasSelectedCity = $city_id > 0;
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:houses',
-            'content' => 'required'
         ], [
             'title.required' => '标题必填',
             'title.unique' => '标题不能重复',
@@ -101,10 +102,20 @@ class HouseController extends Controller
     public function edit($id)
     {
         $house = House::with('tags')->find($id);
-        $categories = City::all();
+        $citys = City::all();
         $tags = Tag::all();
+        $status = Status::all();
+        $cityName = '';
+        foreach($citys as $key => $value){
+             if($house['city_id'] == $value['id']){
+                 $cityName = $value['name'];
+             }
+        }
+
+        $house->cityName =  $cityName;
+
         if ($house) {
-            return response()->json(['flag' => true, 'msg' => '数据获取成功', 'data' => $house, 'categories' => $categories, 'tags' => $tags]);
+            return response()->json(['flag' => true, 'msg' => '数据获取成功', 'data' => $house, 'citys' => $citys, 'tags' => $tags,'status' => $status]);
         }
         return response()->json(['flag' => false, 'msg' => '数据获取失败']);
     }
@@ -124,7 +135,7 @@ class HouseController extends Controller
         }
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'content' => 'required'
+            // 'content' => 'required'
         ], [
             'title.required' => '标题必填',
             'content.required' => '内容必填'

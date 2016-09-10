@@ -19,6 +19,10 @@ import TagIndexComponent from './views/tag/index';
 import TagCreateComponent from './views/tag/create';
 import TagEditComponent from './views/tag/edit';
 
+import StatusIndexComponent from './views/status/index';
+import StatusCreateComponent from './views/status/create';
+import StatusEditComponent from './views/status/edit';
+
 import CommentIndexComponent from './views/comment/index';
 import CommentCreateComponent from './views/comment/create';
 import CommentEditComponent from './views/comment/edit';
@@ -67,16 +71,16 @@ export default function routeConfig(router) {
                     name: 'city_edit',
                     component: cityEditComponent
                 },
-                //post
-                '/post/index': {
+                //house
+                '/house/index': {
                     name: 'post_index',
                     component: PostIndexComponent
                 },
-                '/post/create': {
+                '/house/create': {
                     name: 'post_create',
                     component: PostCreateComponent
                 },
-                '/post/edit/:id': {
+                '/house/edit/:id': {
                     name: 'post_edit',
                     component: PostEditComponent
                 },
@@ -94,6 +98,20 @@ export default function routeConfig(router) {
                     component: TagEditComponent
                 },
                 //tag
+                //status
+                '/status/index': {
+                    name: 'status_index',
+                    component: StatusIndexComponent
+                },
+                '/status/create': {
+                    name: 'status_create',
+                    component: StatusCreateComponent
+                },
+                '/status/edit/:id': {
+                    name: 'status_edit',
+                    component: StatusEditComponent
+                },
+                //status
                 '/comment/index': {
                     name: 'comment_index',
                     component: CommentIndexComponent

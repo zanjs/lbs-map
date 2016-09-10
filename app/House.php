@@ -15,7 +15,7 @@ class House extends Model
     /**
      * @var array
      */
-    protected $fillable = ['city_id', 'title', 'content', 'description', 'image', 'visible'];
+    protected $fillable = ['city_id', 'title', 'content', 'description', 'address','latitude','longitude' ,'image', 'visible'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

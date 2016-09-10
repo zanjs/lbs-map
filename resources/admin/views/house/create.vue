@@ -33,7 +33,7 @@
                                     <div class="col-sm-10">
                                         <select class="form-control" v-model="data.city_id">
                                             <option value="0">请选择</option>
-                                            <option v-for="city in categories" :value="city.id">
+                                            <option v-for="city in citys" :value="city.id">
                                                 {{city.name}}
                                             </option>
                                         </select>
@@ -116,13 +116,16 @@
     export default {
         ready: function () {
             let vm = this;
-            this.$http.get('post/create').then(function (result) {
+            this.$http.get('house/create').then(function (result) {
                 let data = result.data;
                 if (data.flag == true) {
-                    this.categories = data.categories;
+                    this.citys = data.citys;
                     this.tags = data.tags;
+                    this.status = data.status;
+                    console.log( this.status)
                 }
             });
+
 
             // $('#select2').select2({
             //     placeholder: '选择标签',
@@ -144,34 +147,14 @@
                         url: ''
                     }
                 ],
-                categories: [],
-                status:[
-                    {
-                        id:1,
-                        name:"洽谈中"
-                    },
-                    {
-                        id:2,
-                        name:"有店"
-                    },
-                    {
-                        id:3,
-                        name:"专柜"
-                    },
-                    {
-                        id:4,
-                        name:"自有冰箱"
-                    },
-                    {
-                        id:0,
-                        name:"拒绝合作"
-                    }
-                ],
+                status:[],
+                citys: [],
                 tags: [],
                 data: {
                     title: '',
                     city_id: 0,
-                    status:0,
+                    cityName:'',
+                    status:1,
                     tagIds: [],
                     description: '',
                     content: ''
@@ -185,10 +168,10 @@
         },
         methods: {
             createData: function () {
-                this.$http.post('post', this.data).then(function (result) {
+                this.$http.post('house', this.data).then(function (result) {
                     let data = result.data;
                     if (data.flag == true) {
-                        this.$route.router.go('/main/post/index');
+                        this.$route.router.go('/main/house/index');
                     }
                     if (data.errors) {
                         this.errors = data.errors;
