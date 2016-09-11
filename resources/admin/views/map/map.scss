@@ -37,9 +37,41 @@
     color: #FFF;
     text-align: center;
     padding:10px;
+    width: 120px;
+    line-height:18px;
+    font-size: 14px;
+    white-space:normal; 
+    span{
+        display: block;
+        white-space:normal;
+    }
+    p{
+        margin: 0;
+    }
+}
+.select-us{
+    position: absolute;
+    background-color: rgba(91, 191, 238, 0.8);
+    color: #FFF;
+    text-align: center;
+    padding:10px;
+    width: 120px;
     line-height:18px;
     font-size: 14px;
     white-space:normal;
-    moz-user-select:none;
-    
+    list-style: none;
+    li{
+        cursor: pointer;
+        padding: 5px;
+        &:hover{
+            background-color: rgb(91, 191, 238)
+        }
+    }
+    span{
+        display: block;
+        white-space:normal;
+    }
+    p{
+        margin: 0;
+    }
 }
