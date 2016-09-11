@@ -1,6 +1,8 @@
 import LoginComponent from './views/login';
 import LayoutComponent from './views/layout';
 
+import MapComponent from './views/map';
+
 import DashboardComponent from './views/dashboard';
 
 import AdminIndexComponent from './views/admin/index';
@@ -36,6 +38,10 @@ export default function routeConfig(router) {
         '/login': {
             name: 'login',
             component: LoginComponent
+        },
+        '/map': {
+            name: 'map',
+            component: MapComponent
         },
         '/main': {
             name: 'main',

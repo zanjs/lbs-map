@@ -16,6 +16,7 @@ class PostsTableSeeder extends Seeder
 
         $cityIds = \App\City::lists('id')->toArray();
         $tagIds = \App\Tag::lists('id')->toArray();
+    
      
 
         foreach (range(1, 30) as $index) {
@@ -31,10 +32,10 @@ class PostsTableSeeder extends Seeder
             ]);
 
             $tags = $faker->randomElements($tagIds, 3);
-            // $status = $faker->randomElements($statusIds, 3);
+         
 
             $house->tags()->sync($tags);
-            // $house->status()->sync($status);
+    
 
         }
     }

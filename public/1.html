@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+        body, html, #allmap {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            margin: 0;
+            font-family: "微软雅黑";
+        }
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hGzGgrbYoSHskeCyN0eNNEjI"></script>
+    <title>浏览器定位</title>
+</head>
+<body>
+    <div id="allmap"></div>
+    <script type="text/javascript">
+        // 百度地图API功能
+        var map = new BMap.Map("allmap");
+        //    var point = new BMap.Point(116.331398,39.897445);
+        //    map.centerAndZoom(point,12);
+        //添加鼠标滚动缩放
+        map.enableScrollWheelZoom();
+
+        //添加缩略图控件
+        map.addControl(new BMap.OverviewMapControl({ isOpen: false, anchor: BMAP_ANCHOR_BOTTOM_RIGHT }));
+        //添加缩放平移控件
+        map.addControl(new BMap.NavigationControl());
+        //添加比例尺控件
+        // map.addControl(new BMap.ScaleControl());
+        //添加地图类型控件
+        //map.addControl(new BMap.MapTypeControl());
+
+        //设置标注的图标
+        var icon = new BMap.Icon("http://www.icosky.com/icon/png/Avatar/Elite%20Soldiers%20Weapons/Gas%20Soldier%20with%20Weapon.png", new BMap.Size(100, 100));
+        //设置标注的经纬度
+        // var marker = new BMap.Marker(new BMap.Point(118.056156,36.840988),{icon:icon});
+
+        var marker = {};
+        //百度地图定位
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function (r) {
+            if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                //alert('您的位置：'+r.point.lng+','+r.point.lat);
+                showPoint(r);
+            }
+            else {
+                alert('failed' + this.getStatus());
+            }
+        }, { enableHighAccuracy: true })
+
+        var content = "<table>";
+        content = content + "<tr><td> 编号：001</td></tr>";
+        content = content + "<tr><td> 地点：张店区</td></tr>";
+        content = content + "<tr><td> 时间：2016-09-26</td></tr>";
+        content += "</table>";
+        var infowindow = new BMap.InfoWindow(content);
+
+        function showPoint(r) {
+            var point = new BMap.Point(r.point.lng, r.point.lat);
+            map.centerAndZoom(point, 15);
+            map.addControl(new BMap.ScaleControl());
+            marker = new BMap.Marker(point, { icon: icon });
+            map.addOverlay(marker);
+            marker.addEventListener("click", function () {
+                this.openInfoWindow(infowindow);
+            });
+            showBounds();
+        }
+
+        // 编写自定义函数,创建标注
+        function addMarker(point, label) {
+            var marker = new BMap.Marker(point);
+            map.addOverlay(marker);
+            marker.setLabel(label);
+            marker.addEventListener("click", function () {
+                console.dir(label);
+                console.log(label.content);
+            });
+        }
+        function showBounds() {
+            // 随机向地图添加25个标注
+            var bounds = map.getBounds();
+            var sw = bounds.getSouthWest();
+            var ne = bounds.getNorthEast();
+            var lngSpan = Math.abs(sw.lng - ne.lng);
+            var latSpan = Math.abs(ne.lat - sw.lat);
+            for (var i = 0; i < 25; i++) {
+                var point = new BMap.Point(sw.lng + lngSpan * (Math.random() * 0.7), ne.lat - latSpan * (Math.random() * 0.7));
+                var label = new BMap.Label("<span style='display:none'>asdfasd</span>我是id=" + i, { offset: new BMap.Size(20, -10) });
+                addMarker(point, label);
+            }
+        }
+    </script>
+</body>
+</html>

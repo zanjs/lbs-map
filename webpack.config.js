@@ -11,11 +11,11 @@ module.exports = {
         hot: true,
         noInfo: false,
         proxy: {
-            "/backend/*": {                
+            "/backend/*": {
                 target: "http://m.app",
                 secure: false,
-                host:"m.app",
-                changeOrigin: true        
+                host: "m.app",
+                changeOrigin: true
             }
         },
         historyApiFallback: true
@@ -48,6 +48,10 @@ module.exports = {
         }, {
             test: /\.vue$/,
             loader: 'vue'
+        }, {
+            test: /\.scss$/,
+            exclude: /node_modules/,
+            loaders: ["style", "css", "sass?config=otherSassLoaderConfig"]
         }, {
             test: /\.css$/,
             loader: ExtractTextPlugin.extract("style-loader", "css-loader")

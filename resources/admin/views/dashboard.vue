@@ -18,10 +18,10 @@
                 <div class="widget navy-bg">
                     <div class="row vertical-align">
                         <div class="col-xs-3">
-                            <i class="fa fa-thumbs-up fa-3x"></i>
+                            <i class="fa fa-home fa-3x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <h2 class="font-bold">{{data.posts_count}}</h2>
+                            <h2 class="font-bold">{{data.houses_count}}</h2>
                         </div>
                     </div>
                 </div>
@@ -30,10 +30,10 @@
                 <div class="widget navy-bg">
                     <div class="row vertical-align">
                         <div class="col-xs-3">
-                            <i class="fa fa-rss fa-3x"></i>
+                            <i class="fa fa-map-marker fa-3x"></i>
                         </div>
                         <div class="col-xs-9 text-right">
-                            <h2 class="font-bold">{{data.categories_count}}</h2>
+                            <h2 class="font-bold">{{data.citys_count}}</h2>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                 data: {
                     posts_count: 0,
                     users_count: 0,
-                    categories_count: 0
+                    citys_count: 0
                 }
             }
         },

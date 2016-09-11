@@ -22,14 +22,14 @@ class DashboardController extends Controller
 
         $houses_count = House::count();
         $users_count = User::count();
-        $categories_count = City::count();
+        $citys_count = City::count();
 
         return response()->json([
             'flag' => true,
             'data' => [
                 'houses_count' => $houses_count,
                 'users_count' => $users_count,
-                'categories_count' => $categories_count
+                'citys_count' => $citys_count
             ]
         ]);
     }
