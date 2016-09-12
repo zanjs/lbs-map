@@ -40,13 +40,13 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">小区状态：</label>
                                     <div class="col-sm-10">
-                                        <select class="form-control" v-model="data.status">
+                                        <select class="form-control" v-model="data.status_id">
                                             <option value="0">请选择</option>
                                             <option v-for="sta in status" :value="sta.id">
                                                 {{sta.name}}
                                             </option>
                                         </select>
-                                        <label class="help-block error" v-if="errors">{{errors['status']}}</label>
+                                        <label class="help-block error" v-if="errors">{{errors['status_id']}}</label>
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
@@ -151,7 +151,7 @@
                 data: {
                     title: '',
                     city_id: 0,
-                    status:1,
+                    status_id:1,
                     address:'',
                     latitude:'',
                     longitude:'',
@@ -181,10 +181,25 @@
             inArray: function (array, item) {
                 return Array.indexOf(array, item) > -1;
             },
+            getCityInfo:function(cid){
+                 let citys = this.citys;
+                 for(var i = 0, len = citys.length; i < len; i++){
+                     if(citys[i].id == cid ){
+
+                         return citys[i];
+                     }
+                 }
+                 
+                 return false;
+             },
             onBlurMap:function(){
+                let rthis = this;
+                
                 console.log(this.data.address);
                 let data = this.data;
                 let address = this.data.address;
+                let cityName = this.getCityInfo(data.city_id);
+                cityName ? "" : cityName = "上海";
                 // 创建地址解析器实例
                 let myGeo = new BMap.Geocoder();
                 // 将地址解析结果显示在地图上,并调整地图视野
@@ -198,7 +213,7 @@
                     }else{
                         alert("您选择地址没有解析到结果!");
                     }
-                }, data.cityName);
+                }, cityName);
             },
             getData: function () {
                 return new Promise(function (resolve, reject) {

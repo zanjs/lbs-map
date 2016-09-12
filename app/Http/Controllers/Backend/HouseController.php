@@ -22,9 +22,8 @@ class HouseController extends Controller
      */
     public function index(Request $request)
     {
-        $current_page = $request->input('page', 1);
-        $page_size = $request->input('page_size', 15);
-        $houses = House::with('city')->latest()->forPage($current_page, $page_size)->get();
+        
+        $houses = House::with('city')->get();
         $count = House::count();
         return response()->json(['flag' => true, 'data' => $houses, 'count' => $count]);
     }
@@ -105,14 +104,14 @@ class HouseController extends Controller
         $citys = City::all();
         $tags = Tag::all();
         $status = Status::all();
-        $cityName = '';
-        foreach($citys as $key => $value){
-             if($house['city_id'] == $value['id']){
-                 $cityName = $value['name'];
-             }
-        }
+        // $cityName = '';
+        // foreach($citys as $key => $value){
+        //      if($house['city_id'] == $value['id']){
+        //          $cityName = $value['name'];
+        //      }
+        // }
 
-        $house->cityName =  $cityName;
+        // $house->cityName =  $cityName;
 
         if ($house) {
             return response()->json(['flag' => true, 'msg' => '数据获取成功', 'data' => $house, 'citys' => $citys, 'tags' => $tags,'status' => $status]);

@@ -1,5 +1,5 @@
 {
-  "name": "laravel-vue-cms",
+  "name": "lbs-vue",
   "version": "0.0.1",
   "description": "a cms built on laravel5.2, vue.js 1.0+",
   "author": "noop",
@@ -35,5 +35,9 @@
     "vue-style-loader": "^1.0.0",
     "webpack": "^1.12.2",
     "webpack-dev-server": "^1.15.1"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-stage-0": "^6.5.0"
   }
 }

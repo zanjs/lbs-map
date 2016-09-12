@@ -1,0 +1,34 @@
+{   
+    "start":"PC",
+    "PC": {
+        "title": "",
+        "keywords":"",
+        "description":"",
+        "version":"0.0.3",
+        "author":"Julian",
+        "load": {
+            "css": ["./PC/src/scss/main.scss"],
+            "js": ["./libs/js/D.js","./PC/src/js/*.js"]
+        },
+        "build":{
+            "css":"app.css",
+            "js":"app.js"
+        }
+    },
+    "H5": {
+        "title": "",
+        "keywords":"",
+        "description":"",
+        "version":"0.0.2",
+        "author":"Julian",
+        "load": {
+            "css": ["./H5/src/scss/main.scss"],
+            "js": ["./H5/src/js/*.js"]
+        },
+        "build":{
+            "css":"app.css",
+            "js":"app.js"
+        }
+    }
+
+}

@@ -35,14 +35,47 @@ Route::group(['middleware' => ['web']], function () {
 });
 
 
+Route::group(['namespace' => 'Fend', 'prefix' => 'fend','middleware'=>'api'], function () {
+
+
+
+    // Route::post('login', 'AuthController@postLogin');
+    // Route::post('logout', 'AuthController@postLogout');
+    // Route::post('upload', 'CommonController@upload');
+    Route::resource('map', 'MapController');
+    // Route::get('map', 'MapController@index');
+    // Route::post('map/{id}', 'MapController@update()');
+
+
+    // Route::resource('status', 'StatusController');
+
+    // Route::group(['middleware' => ['jwt_token']], function () {
+
+    //     Route::get('dashboard', 'DashboardController@index');
+    //     Route::get('admin_info', 'AdminController@getAdminByToken');
+
+    //     Route::resource('admin', 'AdminController');
+    //     Route::resource('city', 'CityController');
+    //     Route::resource('house', 'HouseController');
+    //     Route::resource('user', 'UserController');
+    //     Route::resource('tag', 'TagController');
+    //     Route::resource('comment', 'CommentController');
+
+    // });
+
+});
+
+
+
 Route::group(['namespace' => 'Backend', 'prefix' => 'backend','middleware'=>'api'], function () {
 
     Route::post('login', 'AuthController@postLogin');
     Route::post('logout', 'AuthController@postLogout');
     Route::post('upload', 'CommonController@upload');
 
-
+    
     Route::resource('status', 'StatusController');
+
     Route::group(['middleware' => ['jwt_token']], function () {
 
         Route::get('dashboard', 'DashboardController@index');

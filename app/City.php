@@ -10,6 +10,15 @@ class City extends Model
 
     protected $fillable = ['name', 'parent_id'];
 
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at', 'updated_at',
+    ];
+
     public function houses()
     {
         return $this->hasMany('$faker\Post', 'house_id', 'id');

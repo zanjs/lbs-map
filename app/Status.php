@@ -17,19 +17,22 @@ class Status extends Model
     protected $fillable = ['name'];
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
      */
+    protected $hidden = [
+        'created_at', 'updated_at',
+    ];
+
+
     public function houses()
     {
-        return $this->belongsToMany('App\House');
+        return $this->hasMany('$faker\Post', 'house_id', 'id');
     }
 
-    /**
-     * @param $query
-     * @return mixed
-     */
-    public function scopeLatest($query)
+    public function status()
     {
-        return $query->orderBy('updated_at', 'desc');
+        return $this->belongsTo('App\Status', 'parent_id', 'id');
     }
 }

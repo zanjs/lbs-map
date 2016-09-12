@@ -45,27 +45,39 @@
                                     <label class="col-sm-2 control-label">小区状态：</label>
 
                                     <div class="col-sm-10">
-                                        <select class="form-control" v-model="data.status">
+                                        <select class="form-control" v-model="data.status_id">
                                             <option value="0">请选择</option>
                                             <option v-for="sta in status" :value="sta.id">
                                                 {{sta.name}}
                                             </option>
                                         </select>
-                                        <label class="help-block error" v-if="errors">{{errors['status']}}</label>
+                                        <label class="help-block error" v-if="errors">{{errors['status_id']}}</label>
                                     </div>
                                 </div>
-                                <!--<div class="hr-line-dashed"></div>
+                                <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">小区标签：</label>
-
+                                    <label class="col-sm-2 control-label">小区地址：</label>
                                     <div class="col-sm-10">
-                                        <select class="form-control" id="select2" multiple="multiple" style="display: none;">
-                                            <option v-for="tag in tags" :value="tag.id">
-                                                {{tag.name}}
-                                            </option>
-                                        </select>
+                                        <input type="text" @blur="onBlurMap"  class="form-control" v-model="data.address">
+                                        <label class="help-block error" v-if="errors">{{errors['addrsss']}}</label>
                                     </div>
-                                </div>-->
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">纬度：</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" v-model="data.latitude">
+                                        <label class="help-block error" v-if="errors">{{errors['latitude']}}</label>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">经度：</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" v-model="data.longitude">
+                                        <label class="help-block error" v-if="errors">{{errors['longitude']}}</label>
+                                    </div>
+                                </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">小区描述：</label>
@@ -125,14 +137,6 @@
                     console.log( this.status)
                 }
             });
-
-
-            // $('#select2').select2({
-            //     placeholder: '选择标签',
-            //     tags: true
-            // }).on('change.select2', function () {
-            //     vm.data.tagIds = ($('#select2').val());
-            // }).trigger('change');
         },
         data: function () {
             return {
@@ -153,10 +157,14 @@
                 data: {
                     title: '',
                     city_id: 0,
+                    status_id:1,
+                    address:'',
+                    latitude:'',
+                    longitude:'',
                     cityName:'',
-                    status:1,
-                    tagIds: [],
                     description: '',
+                    tags: [],
+                    tagIds: [],
                     content: ''
                 },
                 errors: null
@@ -167,6 +175,41 @@
             'editor': Editor
         },
         methods: {
+             getCityInfo:function(cid){
+                 let citys = this.citys;
+                 for(var i = 0, len = citys.length; i < len; i++){
+                     if(citys[i].id == cid ){
+
+                         return citys[i];
+                     }
+                 }
+                 
+                 return false;
+             },
+             onBlurMap:function(){
+                let rthis = this;
+                
+                console.log(this.data.address);
+                let data = this.data;
+                let address = this.data.address;
+                let cityName = this.getCityInfo(data.city_id);
+                cityName ? "" : cityName = "上海";
+                // 创建地址解析器实例
+                let myGeo = new BMap.Geocoder();
+                // 将地址解析结果显示在地图上,并调整地图视野  
+                console.log(cityName);
+                console.log(data.city_id);
+                
+                myGeo.getPoint(address, function(point){
+                    if (point) {
+                        console.log(point)
+                        data.latitude = point.lat;
+                        data.longitude = point.lng;
+                    }else{
+                        alert("您选择地址没有解析到结果");
+                    }
+                }, cityName);
+            },
             createData: function () {
                 this.$http.post('house', this.data).then(function (result) {
                     let data = result.data;
