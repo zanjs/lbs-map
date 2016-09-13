@@ -152,6 +152,7 @@
                     title: '',
                     city_id: 0,
                     status_id:1,
+                    geohash:'',
                     address:'',
                     latitude:'',
                     longitude:'',
@@ -192,8 +193,19 @@
                  
                  return false;
              },
+             getGohash:function(latitude,longitude){
+                 let vm = this;
+                 this.$http.get('/fend/map/geohash/'+ latitude+'/'+ longitude).then(function (result) {
+                    let data = result.data;
+                    if (data.flag == true) {
+                        vm.data.geohash = data.data;
+                        console.log( data.data )
+                        console.log( vm.data.geohash )
+                    }
+                });
+             },
             onBlurMap:function(){
-                let rthis = this;
+                let vm = this;
                 
                 console.log(this.data.address);
                 let data = this.data;
@@ -210,6 +222,7 @@
                         console.log(point)
                         data.latitude = point.lat;
                         data.longitude = point.lng;
+                        vm.getGohash(point.lat,point.lng);
                     }else{
                         alert("您选择地址没有解析到结果!");
                     }

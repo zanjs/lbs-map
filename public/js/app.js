@@ -1,13 +1,14 @@
 
-var uMapConfig = {
+window.uMapConfig = {
     k:"title",
     status:'',
 }
 
-var uMapRoot = {
+window.uMapRoot = {
     init:function(){
         this.getData();
-    },
+    }
+    ,
     getData: function() {
         $.ajax({
             type: "GET",
@@ -29,24 +30,17 @@ var uMapRoot = {
     uphouseInfo:function(data){
         var Id = data.id;
         console.log(Id);
-        $.ajax({
-            type: "POST",
-            url: "/backend/house/"+Id,
-            data:data,
-            dataType: "application/json",
-            success: function(result) {
-               
-                initMap(result.data); //创建和初始化地图
-                uMapConfig.status = result.status;
-                statusList(result.status);
-                // console.log(JSON.stringify(result));
-            },
-            error: function(result, status) {
-                //处理错误
-                console.log(result);
-            }
-        });
 
+         Vue.http.put('/backend/house/' + Id, data).then(function (result) {
+                    let data = result.data;
+                    if (data.flag == true) {
+                        conso.log("ok")
+                    }
+                    if (data.errors) {
+                         conso.log("error")
+                    }
+                   
+        });
     }
 }
 
@@ -263,14 +257,14 @@ function createInfoWindow(json) {
     return iw;
 }
 //创建一个Icon
-function createIcon(json) {
-    var icon = new BMap.Icon("/imgs/map_2.svg", new BMap.Size(json.w, json.h), {
-        imageOffset: new BMap.Size(-json.l, -json.t),
-        infoWindowAnchor: new BMap.Size(json.lb + 5, 1),
-        offset: new BMap.Size(json.x, json.h)
-    })
-    return icon;
-}
+// function createIcon(json) {
+//     var icon = new BMap.Icon("/imgs/map_2.svg", new BMap.Size(json.w, json.h), {
+//         imageOffset: new BMap.Size(-json.l, -json.t),
+//         infoWindowAnchor: new BMap.Size(json.lb + 5, 1),
+//         offset: new BMap.Size(json.x, json.h)
+//     })
+//     return icon;
+// }
 
 function SearchClass(data) {
     this.datas = data;

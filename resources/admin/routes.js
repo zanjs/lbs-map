@@ -1,7 +1,8 @@
 import LoginComponent from './views/login';
 import LayoutComponent from './views/layout';
 
-import MapComponent from './views/map';
+import MapComponent from './views/map/index'; 
+import MapmComponent from './views/map/mobile'; 
 
 import DashboardComponent from './views/dashboard';
 
@@ -39,8 +40,12 @@ export default function routeConfig(router) {
             name: 'login',
             component: LoginComponent
         },
-        '/map': {
-            name: 'map',
+        '/map/m': {
+            name: 'mapm',
+            component: MapmComponent
+        },
+        '/map/pc': {
+            name: 'mappc',
             component: MapComponent
         },
         '/main': {

@@ -13,6 +13,8 @@ use App\City;
 use App\Tag;
 use App\Status;
 
+
+
 class HouseController extends Controller
 {
     /**
@@ -50,13 +52,19 @@ class HouseController extends Controller
     public function store(Request $request)
     {
         $city_id = $request->get('city_id', 0);
+        $latitude = $request->get('latitude', 0);
+        $longitude = $request->get('longitude', 0);
+        $gohash = $request->get('gohash', 0);
         $hasSelectedCity = $city_id > 0;
         $validator = Validator::make($request->all(), [
             'title' => 'required|unique:houses',
+            'latitude' => 'required',
+            'longitude' => 'required'
         ], [
             'title.required' => '标题必填',
             'title.unique' => '标题不能重复',
-            'content.required' => '内容必填'
+            'latitude.required' => '纬度不能为空',
+            'longitude.required' => '经度不能为空'
         ]);
         if (!$city_id || $city_id == 0 || $city_id == '0') {
             $validator->errors()->add('city_id', '选择城市');
@@ -68,11 +76,12 @@ class HouseController extends Controller
             return response()->json(['flag' => false, 'msg' => '验证未通过', 'errors' => $validator->errors()]);
         }
 
+        
         if ($house = House::create($request->all())) {
-            $tagIds = $request->get('tagIds');
-            if ($tagIds && is_array($tagIds)) {
-                $house->tags()->sync($tagIds);
-            }
+            // $tagIds = $request->get('tagIds');
+            // if ($tagIds && is_array($tagIds)) {
+            //     $house->tags()->sync($tagIds);
+            // }
             return response()->json(['flag' => true, 'msg' => '添加成功']);
         }
 
@@ -104,14 +113,14 @@ class HouseController extends Controller
         $citys = City::all();
         $tags = Tag::all();
         $status = Status::all();
-        // $cityName = '';
-        // foreach($citys as $key => $value){
-        //      if($house['city_id'] == $value['id']){
-        //          $cityName = $value['name'];
-        //      }
-        // }
+        $cityName = '';
+        foreach($citys as $key => $value){
+             if($house['city_id'] == $value['id']){
+                 $cityName = $value['name'];
+             }
+        }
 
-        // $house->cityName =  $cityName;
+        $house->cityName =  $cityName;
 
         if ($house) {
             return response()->json(['flag' => true, 'msg' => '数据获取成功', 'data' => $house, 'citys' => $citys, 'tags' => $tags,'status' => $status]);
@@ -134,20 +143,23 @@ class HouseController extends Controller
         }
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            // 'content' => 'required'
+            'latitude' => 'required',
+            'longitude' => 'required'
         ], [
             'title.required' => '标题必填',
-            'content.required' => '内容必填'
+            'title.unique' => '标题不能重复',
+            'latitude.required' => '纬度不能为空',
+            'longitude.required' => '经度不能为空'
         ]);
         if ($validator->fails()) {
             return response()->json(['flag' => false, 'msg' => '验证未通过', 'errors' => $validator->errors()]);
         }
 
         if ($house->update($request->all())) {
-            $tagIds = $request->get('tagIds');
-            if ($tagIds && is_array($tagIds)) {
-                $house->tags()->sync($tagIds);
-            }
+            // $tagIds = $request->get('tagIds');
+            // if ($tagIds && is_array($tagIds)) {
+            //     $house->tags()->sync($tagIds);
+            // }
             return response()->json(['flag' => true, 'msg' => '修改成功']);
         }
 

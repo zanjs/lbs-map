@@ -42,11 +42,13 @@ Route::group(['namespace' => 'Fend', 'prefix' => 'fend','middleware'=>'api'], fu
     // Route::post('login', 'AuthController@postLogin');
     // Route::post('logout', 'AuthController@postLogout');
     // Route::post('upload', 'CommonController@upload');
+    Route::resource('map/count', 'MapController@count');
     Route::resource('map', 'MapController');
     // Route::get('map', 'MapController@index');
     // Route::post('map/{id}', 'MapController@update()');
 
-
+    Route::get('map/search/{latitude}/{longitude}', 'MapController@search');
+    Route::get('map/geohash/{latitude}/{longitude}', 'MapController@geohash');
     // Route::resource('status', 'StatusController');
 
     // Route::group(['middleware' => ['jwt_token']], function () {

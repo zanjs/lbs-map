@@ -16,6 +16,18 @@ module.exports = {
                 secure: false,
                 host: "m.app",
                 changeOrigin: true
+            },
+            "/fend/*": {
+                target: "http://m.app",
+                secure: false,
+                host: "m.app",
+                changeOrigin: true
+            },
+             "/imgs/*": {
+                target: "http://m.app",
+                secure: false,
+                host: "m.app",
+                changeOrigin: true
             }
         },
         historyApiFallback: true
