@@ -61,12 +61,13 @@ class MapController extends Controller
        
        $geohash_val = $geohash->encode($latitude,$longitude);
        
-       $like_geohash = substr($geohash_val, 0, 5);
+       $like_geohash = substr($geohash_val, 0, 3);
 
-       $houses = DB::table('houses')->where('geohash', 'like', $like_geohash.'%')->get();
+       $houses = DB::table('houses')->select('*','name as status_name')->join('status', 'houses.status_id', '=', 'status.id')->where('geohash', 'like', $like_geohash.'%')->get();
        $count = DB::table('houses')->where('geohash', 'like', $like_geohash.'%')->count();
+       $Status = Status::all();
 
-       return response()->json(['flag' => true,'data' =>  $houses ,'geohash' => $like_geohash,'count' => $count,'msg' => '数据获取成功']);
+       return response()->json(['flag' => true,'data' =>  $houses ,'status' => $Status,'geohash' => $like_geohash,'count' => $count,'msg' => '数据获取成功']);
     }
 
      /**
