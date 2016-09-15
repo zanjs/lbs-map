@@ -71,38 +71,6 @@
                         <li><a v-link="{name:'status_create'}">状态添加</a></li>
                     </ul>
                 </li>
-                <!--<li>
-                    <a>
-                        <i class="fa fa-tag"></i>
-                        <span class="nav-label">标签</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li><a v-link="{name:'tag_index'}">标签列表</a></li>
-                        <li><a v-link="{name:'tag_create'}">标签添加</a></li>
-                    </ul>
-                </li>-->
-                <!--<li>
-                    <a>
-                        <i class="fa fa-comment"></i>
-                        <span class="nav-label">评论</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li><a v-link="{name:'comment_index'}">评论列表</a></li>
-                    </ul>
-                </li>-->
-                <!--<li>
-                    <a>
-                        <i class="fa fa-group"></i>
-                        <span class="nav-label">用户</span>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level">
-                        <li><a v-link="{name:'user_index'}">用户列表</a></li>
-                        <li><a v-link="{name:'user_create'}">用户添加</a></li>
-                    </ul>
-                </li>-->
                 <li>
                     <a>
                         <i class="fa fa-user"></i>
@@ -112,6 +80,18 @@
                     <ul class="nav nav-second-level">
                         <li><a v-link="{name:'admin_index'}">管理员列表</a></li>
                         <li><a v-link="{name:'admin_create'}">管理员添加</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a>
+                        <i class="fa fa-map-marker"></i>
+                        <span class="nav-label">地图展示</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li><a v-link="{name:'mappc'}">地图管理</a></li>
+                        <li><a href="/m.html">地图管理</a></li>
+        
                     </ul>
                 </li>
             </ul>
