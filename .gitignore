@@ -6,5 +6,4 @@ Homestead.yaml
 Homestead.json
 .env
 .idea
-public/admin
 npm-debug.log
