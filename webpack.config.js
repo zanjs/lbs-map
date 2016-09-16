@@ -28,6 +28,12 @@ module.exports = {
                 secure: false,
                 host: "m.app",
                 changeOrigin: true
+            },
+             "/uploads/*": {
+                target: "http://m.app",
+                secure: false,
+                host: "m.app",
+                changeOrigin: true
             }
         },
         historyApiFallback: true
@@ -77,7 +83,7 @@ module.exports = {
         }]
     },
     plugins: [
-        new ExtractTextPlugin('css/[name].css'),
+        new ExtractTextPlugin('css/[name]-[hash].css'),
         new webpack.optimize.CommonsChunkPlugin('vendor', 'js/vendor-[hash].js'),
         new HtmlWebpackPlugin({
             template: path.join(srcPath, 'template/index.html')

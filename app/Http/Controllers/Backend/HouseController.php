@@ -25,7 +25,7 @@ class HouseController extends Controller
     public function index(Request $request)
     {
         
-        $houses = House::with('city')->get();
+        $houses = House::with('city','status')->get();
         $count = House::count();
         return response()->json(['flag' => true, 'data' => $houses, 'count' => $count]);
     }
@@ -38,9 +38,8 @@ class HouseController extends Controller
     public function create()
     {
         $citys = City::all();
-        $tags = Tag::all();
         $status = Status::all();
-        return response()->json(['flag' => true, 'citys' => $citys, 'tags' => $tags,'status' => $status]);
+        return response()->json(['flag' => true, 'citys' => $citys, 'status' => $status]);
     }
 
     /**
@@ -109,21 +108,13 @@ class HouseController extends Controller
      */
     public function edit($id)
     {
-        $house = House::with('tags')->find($id);
+        $house = House::with('status','city')->find($id);
         $citys = City::all();
-        $tags = Tag::all();
+       
         $status = Status::all();
-        $cityName = '';
-        foreach($citys as $key => $value){
-             if($house['city_id'] == $value['id']){
-                 $cityName = $value['name'];
-             }
-        }
-
-        $house->cityName =  $cityName;
 
         if ($house) {
-            return response()->json(['flag' => true, 'msg' => '数据获取成功', 'data' => $house, 'citys' => $citys, 'tags' => $tags,'status' => $status]);
+            return response()->json(['flag' => true, 'msg' => '数据获取成功', 'data' => $house, 'citys' => $citys, 'status' => $status]);
         }
         return response()->json(['flag' => false, 'msg' => '数据获取失败']);
     }

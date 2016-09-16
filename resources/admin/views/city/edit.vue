@@ -26,7 +26,7 @@
                                         <label class="help-block error" v-if="errors">{{errors['name']}}</label>
                                     </div>
                                 </div>
-                                <div class="hr-line-dashed"></div>
+                                <!--<div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">父级城市：</label>
 
@@ -39,7 +39,7 @@
                                         </select>
                                         <label class="help-block error" v-if="errors">{{errors['parent_id']}}</label>
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <div class="col-sm-4 col-sm-offset-2">

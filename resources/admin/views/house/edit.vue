@@ -17,7 +17,7 @@
                         <div class="ibox-content">
                             <form class="form-horizontal" @submit.prevent="updateData">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">小区名称：</label>
+                                    <label class="col-sm-2 control-label">菜场名称：</label>
 
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" v-model="data.title">
@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">小区城市：</label>
+                                    <label class="col-sm-2 control-label">菜场城市：</label>
                                     <div class="col-sm-10">
                                         <select class="form-control" v-model="data.city_id">
                                             <option v-for="city in citys" :value="city.id">
@@ -38,7 +38,7 @@
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">小区状态：</label>
+                                    <label class="col-sm-2 control-label">菜场状态：</label>
                                     <div class="col-sm-10">
                                         <select class="form-control" v-model="data.status_id">
                                             <option value="0">请选择</option>
@@ -51,13 +51,13 @@
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">小区地址：</label>
+                                    <label class="col-sm-2 control-label">菜场地址：</label>
                                     <div class="col-sm-10">
                                         <input type="text" @blur="onBlurMap"  class="form-control" v-model="data.address">
                                         <label class="help-block error" v-if="errors">{{errors['addrsss']}}</label>
                                     </div>
                                 </div>
-                                <div class="hr-line-dashed"></div>
+                                <!--<div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">纬度：</label>
                                     <div class="col-sm-10">
@@ -72,11 +72,11 @@
                                         <input type="text" class="form-control" v-model="data.longitude">
                                         <label class="help-block error" v-if="errors">{{errors['longitude']}}</label>
                                     </div>
-                                </div>
+                                </div>-->
 
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">小区描述：</label>
+                                    <label class="col-sm-2 control-label">联系方式：</label>
 
                                     <div class="col-sm-10">
                                         <textarea class="form-control" v-model="data.description"></textarea>
@@ -85,7 +85,7 @@
                                 </div>
                                 <!--<div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">小区内容：</label>
+                                    <label class="col-sm-2 control-label">菜场内容：</label>
 
                                     <div class="col-sm-10">
                                         <editor :model.sync="data.content"></editor>
@@ -134,14 +134,14 @@
         },
         data: function () {
             return {
-                title: '小区修改',
+                title: '菜场修改',
                 breadcrumbs: [
                     {
                         name: '首页',
                         url: ''
                     },
                     {
-                        name: '小区修改',
+                        name: '菜场修改',
                         url: ''
                     }
                 ],
@@ -211,7 +211,7 @@
                 let data = this.data;
                 let address = this.data.address;
                 let cityName = this.getCityInfo(data.city_id);
-                cityName ? "" : cityName = "上海";
+                cityName ? "" : cityName = "无锡";
                 // 创建地址解析器实例
                 let myGeo = new BMap.Geocoder();
                 // 将地址解析结果显示在地图上,并调整地图视野

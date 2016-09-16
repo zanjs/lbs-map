@@ -2,7 +2,7 @@
 
     <div class=" wrapper wrapper-content animated fadeInRight">
         <div class="row">
-            <div class="col-lg-4">
+            <!--<div class="col-lg-4">
                 <div class="widget navy-bg">
                     <div class="row vertical-align">
                         <div class="col-xs-3">
@@ -13,7 +13,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>-->
             <div class="col-lg-4">
                 <div class="widget navy-bg">
                     <div class="row vertical-align">

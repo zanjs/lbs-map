@@ -28,6 +28,18 @@
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
+                                    <label class="col-sm-2 control-label">状态图标 20*20：</label>
+
+                                    <div class="col-sm-10">
+                                        <file-upload :params="{dir:'uploads'}"
+                                                     :action="'/backend/upload'"></file-upload>
+                                        <div class="m-t-sm" v-if="data.image">
+                                            <img :src="data.image" width="60">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
                                     <div class="col-sm-4 col-sm-offset-2">
                                         <button type="submit" class="btn btn-primary">提交
                                         </button>
@@ -50,11 +62,14 @@
 <script>
 
     import BreadCrumb from '../partial/bread-crumb';
+    import FileUpload from '../../components/file-upload';
+    import UploadMixin from '../../mixins/upload';
+    
 
     export default {
         ready: function () {
             this.data.id = this.$route.params.id;
-            this.$http.get('tag/' + this.data.id + '/edit').then(function (result) {
+            this.$http.get('status/' + this.data.id + '/edit').then(function (result) {
                 let data = result.data;
                 if (data.flag == true && data.data) {
                     this.data = data.data;
@@ -78,13 +93,16 @@
                 categories: [],
                 data: {
                     id: 0,
+                    image: '',
                     name: ''
                 },
                 errors: null
             }
         },
+        mixins: [UploadMixin],
         components: {
-            'bread-crumb': BreadCrumb
+            'bread-crumb': BreadCrumb,
+            'file-upload': FileUpload
         },
         methods: {
             updateData: function () {

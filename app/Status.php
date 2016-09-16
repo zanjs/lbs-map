@@ -14,7 +14,7 @@ class Status extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name','image'];
 
     /**
      * The attributes excluded from the model's JSON form.

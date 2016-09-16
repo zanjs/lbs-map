@@ -64,9 +64,7 @@
                 data: [],
                 columns: {
                     id: '#',
-                    name: '名称',
-                    city: ['上级城市','name'],                   
-                    created_at: '创建时间'
+                    name: '名称'
                 }
 
             }

@@ -52,12 +52,12 @@
                 <li>
                     <a>
                         <i class="fa fa-files-o"></i>
-                        <span class="nav-label">小区</span>
+                        <span class="nav-label">菜场</span>
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level">
-                        <li><a v-link="{name:'post_index'}">小区列表</a></li>
-                        <li><a v-link="{name:'post_create'}">小区添加</a></li>
+                        <li><a v-link="{name:'post_index'}">菜场列表</a></li>
+                        <li><a v-link="{name:'post_create'}">菜场添加</a></li>
                     </ul>
                 </li>
                  <li>
@@ -90,7 +90,7 @@
                     </a>
                     <ul class="nav nav-second-level">
                         <li><a v-link="{name:'mappc'}">地图管理</a></li>
-                        <li><a href="/m.html">地图管理</a></li>
+                        <li><a href="/m.html">手机地图</a></li>
         
                     </ul>
                 </li>

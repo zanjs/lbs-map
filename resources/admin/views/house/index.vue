@@ -47,14 +47,14 @@
         },
         data: function () {
             return {
-                title: '小区列表',
+                title: '菜场列表',
                 breadcrumbs: [
                     {
                         name: '首页',
                         url: ''
                     },
                     {
-                        name: '小区列表',
+                        name: '菜场列表',
                         url: ''
                     }
                 ],
@@ -62,11 +62,11 @@
                 pageSize: 15,
                 count: 0,
                 data: [],
-                columns: {
-                    id: '#',
+                columns: {                   
                     title: '标题',
                     city: ['所属城市', 'name'],
-                    created_at: '创建时间'
+                    description:'联系方式',
+                    status:['状态','name']
                 }
 
             }

@@ -236,7 +236,8 @@
                     let p0 = json.longitude;
                     let p1 = json.latitude;
                     let point = new BMap.Point(p0, p1);
-                    let iconImg = new BMap.Icon('/imgs/map_2.svg', new BMap.Size(50, 50));
+                    let imgSrc = json.status.image || '/imgs/map_2.svg';
+                    let iconImg = new BMap.Icon(imgSrc, new BMap.Size(20, 20));
                     let marker = new BMap.Marker(point, {
                         icon: iconImg
                     });
@@ -283,18 +284,18 @@
 
                     marker.addContextMenu(markerMenu);
 
-                    let label = new BMap.Label(json.title, {
-                        "offset": new BMap.Size(0, 50)
-                    });
+                    // let label = new BMap.Label(json.title, {
+                    //     "offset": new BMap.Size(0, 20)
+                    // });
 
 
-                    marker.setLabel(label);
+                    // marker.setLabel(label);
                     map.addOverlay(marker);
-                    label.setStyle({
-                        borderColor: "#808080",
-                        color: "#333",
-                        cursor: "pointer"
-                    });
+                    // label.setStyle({
+                    //     borderColor: "#808080",
+                    //     color: "#333",
+                    //     cursor: "pointer"
+                    // });
 
                     (function() {
                         let _json = json;
@@ -304,16 +305,16 @@
                             this.openInfoWindow(_iw);
                         });
                         _iw.addEventListener("open", function() {
-                            _marker.getLabel().hide();
+                            // _marker.getLabel().hide();
                         })
                         _iw.addEventListener("close", function() {
-                            _marker.getLabel().show();
+                            // _marker.getLabel().show();
                         })
-                        label.addEventListener("click", function() {
-                            _marker.openInfoWindow(_iw);
-                        })
+                        // label.addEventListener("click", function() {
+                        //     _marker.openInfoWindow(_iw);
+                        // })
                         if (!!json.is_open) {
-                            label.hide();
+                            // label.hide();
                             _marker.openInfoWindow(_iw);
                         }
                     })()

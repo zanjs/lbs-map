@@ -65,8 +65,7 @@
                 columns: {
                     id: '#',
                     name: '姓名',
-                    email: '邮箱',
-                    created_at: '创建时间'
+                    email: '邮箱'
                 }
 
             }
