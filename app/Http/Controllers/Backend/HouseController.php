@@ -25,7 +25,9 @@ class HouseController extends Controller
     public function index(Request $request)
     {
         
-        $houses = House::with('city','status')->get();
+        $current_page = $request->input('page', 1);
+        $page_size = $request->input('page_size', 15);
+        $houses = House::with('city','status')->forPage($current_page, $page_size)->get();
         $count = House::count();
         return response()->json(['flag' => true, 'data' => $houses, 'count' => $count]);
     }

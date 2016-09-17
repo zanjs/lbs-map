@@ -2,7 +2,7 @@ window.mapInfoConfig = {
     k: "name",
     keyword: "",
     type: "more",
-    s:"all",
+    s: "all",
     userPoint: {
         lat: "",
         lng: "",
@@ -24,8 +24,32 @@ window.mapInfoConfig = {
         });
     },
     status: [],
-    translateCallback: function(point) {
+    init: function() {
+        var vm = this;
+        var defpoint = {
+            coords: {
+                latitude: 31.266507,
+                longitude: 121.412366
+            },
+            lat: 31.253715,
+            lng: 121.414496
+        };
+        window.map = new BMap.Map("m-map");
+     
+
+         /*h5获取地理位置*/
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(showPosition);
+        // } else {
+        //     alert("未收到gps地址")
+        // };
+
+        vm.showPosition(defpoint);
+
+    },
+    translateCall: function(point) {
         // point = defpoint;
+      
         var vm = this;
 
         map.clearOverlays();
@@ -33,6 +57,36 @@ window.mapInfoConfig = {
         vm.addMarkerUser();
         vm.getGeoHouse(point);
         vm.start();
+    },
+    showPosition: function(position) {
+        var vm = this;
+        var lat = position.coords.latitude;
+        var lng = position.coords.longitude;
+        var gpsPoint = new BMap.Point(lng, lat);
+
+
+        // 地图初始化
+        map.centerAndZoom(gpsPoint, 13);
+        // 标记
+        var marker = new BMap.Marker(gpsPoint);
+        map.addOverlay(marker);
+
+
+        map.addControl(new BMap.NavigationControl());
+
+        setTimeout(function() {
+
+            BMap.Convertor.translate(gpsPoint, 0, translateCallback); //真实经纬度转成百度坐标
+
+        }, 1000);
+
+
+        //坐标转换完之后的回调函数
+        translateCallback = function(point) {
+            console.log(point);
+            vm.translateCall(point);
+
+        }
     },
     getGeoHouse: function(obj) {
         var vm = this;
@@ -56,8 +110,8 @@ window.mapInfoConfig = {
         });
 
     },
-    showCount:function(count){
-        $(".show-info-m").text("现有 "+count+" 个");
+    showCount: function(count) {
+        $(".show-info-m").text("现有 " + count + " 个");
     },
     addMarkerUser: function() {
         var vm = this;
@@ -87,7 +141,7 @@ window.mapInfoConfig = {
             var p0 = json.longitude;
             var p1 = json.latitude;
             var point = new BMap.Point(p0, p1);
-            var imgSrc = json.image || '/imgs/map_2.svg';
+            let imgSrc = json.image || '/imgs/map_2.svg';
             var iconImg = new BMap.Icon(imgSrc, new BMap.Size(20, 20));
             var marker = new BMap.Marker(point, {
                 icon: iconImg
@@ -114,15 +168,15 @@ window.mapInfoConfig = {
                 _marker.addEventListener("click", function() {
                     this.openInfoWindow(_iw);
                 });
-                // _iw.addEventListener("open", function() {
-                //     _marker.getLabel().hide();
-                // })
-                // _iw.addEventListener("close", function() {
-                //     _marker.getLabel().show();
-                // })
-                // label.addEventListener("click", function() {
-                //     _marker.openInfoWindow(_iw);
-                // })
+                _iw.addEventListener("open", function() {
+                    // _marker.getLabel().hide();
+                })
+                _iw.addEventListener("close", function() {
+                        // _marker.getLabel().show();
+                    })
+                    // label.addEventListener("click", function() {
+                    //     _marker.openInfoWindow(_iw);
+                    // })
                 if (!!json.is_open) {
                     // label.hide();
                     _marker.openInfoWindow(_iw);
@@ -145,7 +199,7 @@ window.mapInfoConfig = {
         for (var i = 0; i < len; i++) {
             ops += '<a data-key="' + status[i].name + '">' + status[i].name + '</a>';
         }
-      
+
         $(".footer-m-sec").html(ops);
 
     },
@@ -167,10 +221,10 @@ window.mapInfoConfig = {
         // rule = {k:"名字",d:"搜索关键字",t:{single名字精确查找|more名字模糊匹配查找},s{''只返回找到的结果|all返回所有的} 
         var vm = this;
         var rule = {
-            k:vm.k,
-            d:$.trim(vm.keyword),
-            t:vm.type,
-            s:vm.k
+            k: vm.k,
+            d: $.trim(vm.keyword),
+            t: vm.type,
+            s: vm.k
         }
         var datas = vm.sethData;
         if (datas == null) {
@@ -225,3 +279,8 @@ window.mapInfoConfig = {
 }
 
 
+$(function(){
+     // FastClick.attach(document.body); 
+ mapInfoConfig.init();
+  alert("ss");
+})

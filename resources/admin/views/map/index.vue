@@ -4,7 +4,7 @@
         <input id="type1" type="radio" name="type" value="single" /><label for="type1">精准查找</label><br/>
         <input id="type2" type="radio" name="type" value="more" checked="checked" /><label for="type2">模糊查找</label><br />
         <input id="keyword" type="text" value="" class="form-control" /><br />
-        <input type="button" v-on:click="mapDateReset()" class="success button btn btn-white" value="归档数据" />
+        <input type="button" v-on:click="mapDateReset()" class="success button btn btn-white" value="显示全部" />
         <input id="search-btn" type="button" value="搜索" class="button btn  btn-primary" /><br /><br />
         <select name="keyv" id="keyv" class="form-control">
             <option value="title" v-for="sta in status" :value="sta.name" >{{sta.name}}</option>

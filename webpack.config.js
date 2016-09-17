@@ -23,13 +23,13 @@ module.exports = {
                 host: "m.app",
                 changeOrigin: true
             },
-             "/imgs/*": {
+            "/imgs/*": {
                 target: "http://m.app",
                 secure: false,
                 host: "m.app",
                 changeOrigin: true
             },
-             "/uploads/*": {
+            "/uploads/*": {
                 target: "http://m.app",
                 secure: false,
                 host: "m.app",
@@ -53,6 +53,11 @@ module.exports = {
     },
     resolveLoader: {
         root: path.join(__dirname, 'node_modules'),
+    },
+    vue: {
+        loaders: {
+            scss: ['vue-style-loader', 'css', 'sass'].join('!')
+        }
     },
     module: {
         loaders: [{

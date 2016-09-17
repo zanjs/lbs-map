@@ -39,6 +39,7 @@
 <script>
     import BreadCrumb from '../partial/bread-crumb';
     import DataTable from '../../components/data-table';
+    import DataTables from '../../components/data-tables';
     import Pagination from '../../components/pagination';
 
     export default {

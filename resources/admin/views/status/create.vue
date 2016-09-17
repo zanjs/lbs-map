@@ -34,7 +34,7 @@
                                         <file-upload :params="{dir:'uploads'}"
                                                      :action="'/backend/upload'"></file-upload>
                                         <div class="m-t-sm" v-if="data.image">
-                                            <img :src="data.image" width="60">
+                                            <img :src="data.image" >
                                         </div>
                                     </div>
                                 </div>

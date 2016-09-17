@@ -62,6 +62,8 @@
 //                    this.$dispatch('on' + ucFirst(action), params);
 //                }
                 //accept array or string
+                console.log(action)
+                console.log(params)
                 action = 'on' + ucFirst(action);
                 let args = [];
                 if (Array.isArray(params)) {
