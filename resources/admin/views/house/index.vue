@@ -16,7 +16,7 @@
                         </div>
                         <div class="ibox-content">
 
-                            <data-table :data="data" :columns="columns"></data-table>
+                            <!--<data-table :data="data" :columns="columns"></data-table>
 
                             <div class="row">
                                 <div class="col-lg-12">
@@ -24,7 +24,7 @@
                                         <pagination :count="count" :page="page" :page-size="pageSize"></pagination>
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
                             <data-tables :data="data" :data-table="tableData"></data-tables>
 
                         </div>
@@ -59,7 +59,7 @@
                     url: ''
                 }],
                 page: 1,
-                pageSize: 15,
+                pageSize: 1000,
                 count: 0,
                 data: [],
                 columns: {
@@ -157,7 +157,7 @@
                         },
 
                         description: {
-                            value: data[i].address,
+                            value: data[i].description,
                             editable: false
                         },
 

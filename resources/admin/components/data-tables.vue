@@ -36,7 +36,11 @@
             <span>{{item.value}}</span>
           </td>
           <td>
-             <a :class="{'m-l-sm':$index>0}"  @click.prevent="invokeAction(action.name,row.id.value)"  v-for="action in actions">{{action.display}}</a>
+            <div  class="v-caozuo-d">
+              <a :class="" v-for="action in actions"
+                @click.prevent="invokeAction(action.name,row.id.value)">{{action.display}}</a>
+            </div>
+             
           </td>
         </tr>
       </tbody>
@@ -90,14 +94,14 @@
           desc: true
         },
         actions: [{
-            name: 'edit',
-            display: '编辑',
-            prop: 'id'
-          }, {
-            name: 'delete',
-            display: '删除',
-            prop: 'id'
-          }]
+          name: 'edit',
+          display: '编辑',
+          prop: 'id'
+        }, {
+          name: 'delete',
+          display: '删除',
+          prop: 'id'
+        }]
       }
     },
 
@@ -216,12 +220,14 @@
 
           rows = rows.filter((row) => {
             let r = false;
+            let sea = this.searchBy.replace(/(^\s*)|(\s*$)/g, "").toLowerCase();
+            let searr = sea.split(" ");
 
             for (let key in row) {
-              if (row[key].value
-                .toString()
-                .toLowerCase()
-                .indexOf(this.searchBy.toLowerCase()) !== -1) {
+              let rowVa = row[key].value.toString().toLowerCase();
+              let cnub = 0;
+
+              if (rowVa.indexOf(searr[0]) !== -1) {
                 r = true;
               }
             }
@@ -354,7 +360,8 @@
           background-color: #fff;
           td {
             text-align: left;
-            padding: 10px 8px;
+            padding: 4px;
+            padding-bottom: 0;
           }
           &:nth-child(odd) {
             background-color: #f9f9f9;
@@ -437,6 +444,22 @@
             /*background: linear-gradient(to bottom, #fff 0%, #dcdcdc 100%);*/
           }
         }
+      }
+    }
+  }
+  
+  .v-caozuo-d {
+    min-width: 40px;
+    a {
+      display: inline-block;
+      line-height: 26px;
+      &:first-child {
+        font-size: 14px;
+        color: #FFF;
+        background-color: #337ab7;
+        padding: 5px 10px;
+        margin-bottom: 10px;
+        margin-right: 20px;
       }
     }
   }
