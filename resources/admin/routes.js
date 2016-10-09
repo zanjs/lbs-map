@@ -26,6 +26,14 @@ import StatusIndexComponent from './views/status/index';
 import StatusCreateComponent from './views/status/create';
 import StatusEditComponent from './views/status/edit';
 
+
+import ProductIndexComponent from './views/product/index';
+import ProductCreateComponent from './views/product/create';
+import ProductEditComponent from './views/product/edit';
+
+
+
+
 import CommentIndexComponent from './views/comment/index';
 import CommentCreateComponent from './views/comment/create';
 import CommentEditComponent from './views/comment/edit';
@@ -121,6 +129,18 @@ export default function routeConfig(router) {
                 '/status/edit/:id': {
                     name: 'status_edit',
                     component: StatusEditComponent
+                },
+                '/product/index': {
+                    name: 'product_index',
+                    component: ProductIndexComponent
+                },
+                '/product/create': {
+                    name: 'product_create',
+                    component: ProductCreateComponent
+                },
+                '/product/edit/:id': {
+                    name: 'product_edit',
+                    component: ProductEditComponent
                 },
                 //status
                 '/comment/index': {

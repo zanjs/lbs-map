@@ -15,9 +15,9 @@
                             <div class="ibox-tools"></div>
                         </div>
                         <div class="ibox-content">
-                            <div class="admin-view">
+
                             <data-table :data="data" :columns="columns"></data-table>
-                            </div>
+
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="pull-right">
@@ -39,7 +39,6 @@
 <script>
     import BreadCrumb from '../partial/bread-crumb';
     import DataTable from '../../components/data-table';
-    import DataTables from '../../components/data-tables';
     import Pagination from '../../components/pagination';
 
     export default {
@@ -48,14 +47,14 @@
         },
         data: function () {
             return {
-                title: '管理员列表',
+                title: '产品列表',
                 breadcrumbs: [
                     {
                         name: '首页',
                         url: ''
                     },
                     {
-                        name: '管理员列表',
+                        name: '产品列表',
                         url: ''
                     }
                 ],
@@ -65,8 +64,9 @@
                 data: [],
                 columns: {
                     id: '#',
-                    name: '姓名',
-                    email: '邮箱'
+                    name: '名称',
+                    price: '价格',
+                    norm: '规格'
                 }
 
             }
@@ -78,7 +78,7 @@
         },
         methods: {
             getData: function () {
-                this.$http.get('admin', {
+                this.$http.get('product', {
                     page: this.page,
                     page_size: this.pageSize
                 }).then(function (result) {
@@ -90,10 +90,10 @@
         },
         events: {
             onEdit: function (id) {
-                this.$route.router.go({name: 'admin_edit', params: {id: id}})
+                this.$route.router.go({name: 'product_edit', params: {id: id}})
             },
             onDelete: function (id) {
-                this.$http.delete('admin/' + id).then(function (result) {
+                this.$http.delete('product/' + id).then(function (result) {
                     let data = result.data;
                     if (data.flag == true) {
                         this.getData();
@@ -108,8 +108,3 @@
         }
     }
 </script>
-<style lang="stylus">
-.admin-view td a:nth-child(2)
-    display none
-
-</style>

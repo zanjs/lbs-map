@@ -25,6 +25,8 @@
     "sass-loader": "^4.0.2",
     "scss-loader": "0.0.1",
     "style-loader": "^0.13.1",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^2.3.1",
     "url-loader": "^0.5.7",
     "vue": "^1.0.0",
     "vue-hot-reload-api": "^1.2.0",

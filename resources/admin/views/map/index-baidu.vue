@@ -43,12 +43,6 @@
         隐藏操作面板
     </div>
 </template>
-<style lang="stylus">
-.amap-logo
-    display none
-.amap-copyright
-    display none!important
-</style>
 <script>
     //scss
     import './map.scss';
@@ -176,63 +170,16 @@
             },
             initMap: function(BASEDATA) {
                 let vm = this;
-                let dataleng = BASEDATA.length;
-                console.log(BASEDATA)
-                
-                var map = new AMap.Map("l-map", {resizeEnable: true});
-                var lnglats = [
-                    [116.368904, 39.923423],
-                    [116.382122, 39.921176],
-                    [116.387271, 39.922501],
-                    [116.398258, 39.914600]
-                ];
-                var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
 
-                for (var i = 0, marker; i < dataleng; i++) {
-                    var json = BASEDATA[i];
-                    var lnglats = [json.longitude,json.latitude];
-                    var title = json.title;
-                    var iconsrc = json.status.image || "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png"  ;
-                    console.log(iconsrc);
-                    var marker = new AMap.Marker({
-                        map: map,
-                        position: lnglats,
-                        icon: new AMap.Icon({            
-                            size: new AMap.Size(20, 20),  //图标大小
-                            // imageOffset: new AMap.Pixel(0, -60),
-                            image: iconsrc,
-
-                        })        
-                    });
-                    marker.content = vm.createInfoWindow(json);
-                    marker.on('click', markerClick);
-                    marker.emit('click', {target: marker});
-                    var contextMenu = new AMap.ContextMenu();  //创建右键菜单
-
-                    marker.json = json;
-                        //右键放大
-                    contextMenu.addItem("修改"+ title, function(e) {
-                        console.log(marker)
-                        map.zoomIn();
-                    }, 0);
-
-                        //绑定鼠标右击事件——弹出右键菜单
-                    marker.on('rightclick', function(e) {
-                        contextMenu.open(map, e.lnglat);
-                    });
-
-                }
-                function markerClick(e) {
-                    infoWindow.setContent(e.target.content);
-                    infoWindow.open(map, e.target.getPosition());
-                }
-                map.setFitView();
-
-                
+                window.map = new BMap.Map("l-map");
+                map.clearOverlays();
+                map.centerAndZoom(new BMap.Point(BASEDATA[0].longitude, BASEDATA[0].latitude), 14);
+                map.enableScrollWheelZoom();
+                map.addControl(new BMap.NavigationControl());
                 //创建自定义搜索类
-                // window.searchClass = new SearchClass();
-                // searchClass.setData(BASEDATA)
-                // vm.mapDateReset();
+                window.searchClass = new SearchClass();
+                searchClass.setData(BASEDATA)
+                vm.mapDateReset();
             },
             mapDateReset() {
                 let vm = this;
@@ -284,14 +231,101 @@
                 map.clearOverlays();
                 vm.countInfo(data);
                 let leng = data.length;
-              
+                for (var i = 0; i < leng; i++) {
+                    let json = data[i];
+                    let p0 = json.longitude;
+                    let p1 = json.latitude;
+                    let point = new BMap.Point(p0, p1);
+                    let imgSrc = json.status.image || '/imgs/map_2.svg';
+                    let iconImg = new BMap.Icon(imgSrc, new BMap.Size(20, 20));
+                    let marker = new BMap.Marker(point, {
+                        icon: iconImg
+                    });
+
+                    marker.houseInfo = json;
+
+                    let updateLabel = function(e, ee, label) {
+                        // map.removeOverlay(label); 
+                        console.log(label);
+
+                        $(".select-us").remove();
+
+                        let selectSta = '';
+
+                        let uphouseInfo = label.houseInfo;
+                        let uphouseInfoStc = JSON.stringify(uphouseInfo);
+                        let statusList = vm.status;
+                        let slen = statusList.length;
+                        for (var i = 0; i < slen; i++) {
+                            let isClass = '';
+                            if (statusList[i].id == uphouseInfo.status.id) {
+                                isClass = 'on';
+                            }
+                            selectSta += '<li  class="' + isClass + '" data-id="' + statusList[i].id + '">' + statusList[i].name + '</li>';
+                        };
+
+
+
+                        let ul = $('<ul></ul>');
+                        ul.attr("data-info", uphouseInfoStc)
+                        ul.attr("class", "select-us");
+                        ul.css({
+                            "top": ee.y,
+                            "left": ee.x
+                        })
+                        ul.html(selectSta);
+                        $("body").append(ul);　　
+
+                    };
+
+                    //创建右键菜单
+                    let markerMenu = new BMap.ContextMenu();
+                    markerMenu.addItem(new BMap.MenuItem('修改' + json.title, updateLabel.bind(marker)));
+
+                    marker.addContextMenu(markerMenu);
+
+                    // let label = new BMap.Label(json.title, {
+                    //     "offset": new BMap.Size(0, 20)
+                    // });
+
+
+                    // marker.setLabel(label);
+                    map.addOverlay(marker);
+                    // label.setStyle({
+                    //     borderColor: "#808080",
+                    //     color: "#333",
+                    //     cursor: "pointer"
+                    // });
+
+                    (function() {
+                        let _json = json;
+                        let _iw = vm.createInfoWindow(_json);
+                        let _marker = marker;
+                        _marker.addEventListener("click", function() {
+                            this.openInfoWindow(_iw);
+                        });
+                        _iw.addEventListener("open", function() {
+                            // _marker.getLabel().hide();
+                        })
+                        _iw.addEventListener("close", function() {
+                            // _marker.getLabel().show();
+                        })
+                        // label.addEventListener("click", function() {
+                        //     _marker.openInfoWindow(_iw);
+                        // })
+                        if (!!json.is_open) {
+                            // label.hide();
+                            _marker.openInfoWindow(_iw);
+                        }
+                    })()
+                }
             },
             createInfoWindow: function(json) {
                 //创建InfoWindow
                 let stname = json.status ? json.status.name : "";
                 let html = '<b class="iw_poi_title" title="' + json.title + '">' + json.title + '</b><div class="iw_poi_address">' + json.address + '</div><div class="iw_poi_stname">' + stname + '</div>';
-                // let iw = new BMap.InfoWindow(html);
-                return html;
+                let iw = new BMap.InfoWindow(html);
+                return iw;
             },
             updateData: function(data) {
                 let Id = data.id;

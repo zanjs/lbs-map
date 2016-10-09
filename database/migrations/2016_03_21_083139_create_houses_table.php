@@ -16,6 +16,7 @@ class CreateHousesTable extends Migration
             $table->increments('id');
             $table->integer('city_id')->unsigned();
             $table->string('title');
+            $table->string('number');
             $table->text('description');
             $table->integer('status_id');
             $table->boolean('is_open')->default(0);

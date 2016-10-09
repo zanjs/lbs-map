@@ -26,6 +26,15 @@
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
+                                    <label class="col-sm-2 control-label">菜场编号：</label>
+
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" v-model="data.number">
+                                        <label class="help-block error" v-if="errors">{{errors['number']}}</label>
+                                    </div>
+                                </div>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
                                     <label class="col-sm-2 control-label">菜场城市：</label>
                                     <div class="col-sm-10">
                                         <select class="form-control" v-model="data.city_id">
@@ -53,7 +62,7 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">菜场地址：</label>
                                     <div class="col-sm-10">
-                                        <input type="text" @blur="onBlurMap"  class="form-control" v-model="data.address">
+                                        <input type="text" @blur="onBlurMap" class="form-control" v-model="data.address">
                                         <label class="help-block error" v-if="errors">{{errors['addrsss']}}</label>
                                     </div>
                                 </div>
@@ -154,6 +163,7 @@
                     status_id:1,
                     geohash:'',
                     address:'',
+                    number:'',
                     latitude:'',
                     longitude:'',
                     cityName:'',
@@ -212,21 +222,44 @@
                 let address = this.data.address;
                 let cityName = this.getCityInfo(data.city_id);
                 cityName ? "" : cityName = "无锡";
-                // 创建地址解析器实例
-                let myGeo = new BMap.Geocoder();
-                // 将地址解析结果显示在地图上,并调整地图视野
+           
                 console.log(data.cityName);
+
+                var geocoder;
+
+                AMap.service('AMap.Geocoder',function(){//回调函数
+                    //实例化Geocoder
+                    geocoder = new AMap.Geocoder();
+
+                    geocoder.getLocation(cityName+address, function(status, result) {
+                        if (status === 'complete' && result.info === 'OK') {
+                            //TODO:获得了有效经纬度，可以做一些展示工作
+                            //比如在获得的经纬度上打上一个Marker
+                            if(result.geocodes[0]){
+                                console.log(result.geocodes[0]);
+                                vm.saveMapLocation(result.geocodes[0].location);
+                            }
+                           
+                        }else{
+                            //获取经纬度失败
+                            alert("您选择地址没有解析到结果!");
+                        }
+                    }); 
+
+
+                    //TODO: 使用geocoder 对象完成相关功能
+                });
                 
-                myGeo.getPoint(address, function(point){
-                    if (point) {
-                        console.log(point)
-                        data.latitude = point.lat;
-                        data.longitude = point.lng;
-                        vm.getGohash(point.lat,point.lng);
-                    }else{
-                        alert("您选择地址没有解析到结果!");
-                    }
-                }, cityName);
+     
+            },
+            saveMapLocation:function(Location){
+                console.log(Location);
+                let vm = this;
+                let data = vm.data;
+
+                data.latitude = Location.lat;
+                data.longitude = Location.lng;
+                vm.getGohash(Location.lat,Location.lng);
             },
             getData: function () {
                 return new Promise(function (resolve, reject) {

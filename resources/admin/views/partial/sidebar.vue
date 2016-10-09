@@ -38,6 +38,17 @@
                         <span class="nav-label">首页</span>
                     </a>
                 </li>
+                 <li>
+                    <a>
+                        <i class="fa fa-cutlery"></i>
+                        <span class="nav-label">产品</span>
+                        <span class="fa arrow"></span>
+                    </a>
+                    <ul class="nav nav-second-level">
+                        <li><a v-link="{name:'product_index'}">产品列表</a></li>
+                        <li><a v-link="{name:'product_create'}">产品添加</a></li>
+                    </ul>
+                </li>
                 <li>
                     <a>
                         <i class="fa fa-sitemap"></i>

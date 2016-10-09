@@ -19,10 +19,7 @@ class City extends Model
         'created_at', 'updated_at',
     ];
 
-    public function houses()
-    {
-        return $this->hasMany('$faker\Post', 'house_id', 'id');
-    }
+  
 
     public function city()
     {
