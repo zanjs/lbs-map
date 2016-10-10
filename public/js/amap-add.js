@@ -9,9 +9,9 @@ window.mapInfoConfig = {
     },
     sethData: [],
     searchData: [],
-    start: function() {
+    start: function () {
         var vm = this;
-        $(".footer-m-sec").on("click", "a", function() {
+        $(".footer-m-sec").on("click", "a", function () {
             var _t = $(this);
             var _tp = _t.parent();
             var _key = _t.attr("data-key");
@@ -24,71 +24,17 @@ window.mapInfoConfig = {
         });
     },
     status: [],
-    init: function() {
-        var vm = this;
-        var defpoint = {
-            coords: {
-                latitude: 31.266507,
-                longitude: 121.412366
-            },
-            lat: 31.253715,
-            lng: 121.414496
-        };
-        window.map = new BMap.Map("m-map");
-     
-
-         /*h5获取地理位置*/
-        // if (navigator.geolocation) {
-        //     navigator.geolocation.getCurrentPosition(showPosition);
-        // } else {
-        //     alert("未收到gps地址")
-        // };
-
-        vm.showPosition(defpoint);
-
-    },
-    translateCall: function(point) {
+    translateCallback: function (point) {
         // point = defpoint;
-      
         var vm = this;
 
-        map.clearOverlays();
+        map.clearMap();
         vm.userPoint = point;
         vm.addMarkerUser();
         vm.getGeoHouse(point);
         vm.start();
     },
-    showPosition: function(position) {
-        var vm = this;
-        var lat = position.coords.latitude;
-        var lng = position.coords.longitude;
-        var gpsPoint = new BMap.Point(lng, lat);
-
-
-        // 地图初始化
-        map.centerAndZoom(gpsPoint, 13);
-        // 标记
-        var marker = new BMap.Marker(gpsPoint);
-        map.addOverlay(marker);
-
-
-        map.addControl(new BMap.NavigationControl());
-
-        setTimeout(function() {
-
-            BMap.Convertor.translate(gpsPoint, 0, translateCallback); //真实经纬度转成百度坐标
-
-        }, 1000);
-
-
-        //坐标转换完之后的回调函数
-        translateCallback = function(point) {
-            console.log(point);
-            vm.translateCall(point);
-
-        }
-    },
-    getGeoHouse: function(obj) {
+    getGeoHouse: function (obj) {
         var vm = this;
         var latitude = obj.lat;
         var longitude = obj.lng;
@@ -97,100 +43,112 @@ window.mapInfoConfig = {
             type: "GET",
             url: "/fend/map/search/" + latitude + "/" + longitude,
             dataType: "json",
-            success: function(result) {
+            success: function (result) {
                 vm.addMarkerHouse(result.data);
                 vm.sethData = result.data;
                 vm.status = result.status;
                 vm.statusList();
             },
-            error: function(result, status) {
+            error: function (result, status) {
                 //处理错误
                 console.log(result);
             }
         });
 
     },
-    showCount: function(count) {
+    showCount: function (count) {
         $(".show-info-m").text("现有 " + count + " 个");
     },
-    addMarkerUser: function() {
+    addMarkerUser: function () {
         var vm = this;
         var point = vm.userPoint;
-        var iconImg = new BMap.Icon('/imgs/me.svg', new BMap.Size(66, 86));
-        var marker = new BMap.Marker(point, {
-            icon: iconImg
+        // var iconImg = new BMap.Icon('/imgs/me.svg', new BMap.Size(66, 86));
+        // var marker = new BMap.Marker(point, {
+        //     icon: iconImg
+        // });
+        console.log(point)
+        console.log(map)
+   
+
+         var marker = new AMap.Marker({
+                map: map,
+                position: [point.lng, point.lat],
+                icon: new AMap.Icon({            
+                    size: new AMap.Size(24, 24),  //图标大小
+                    // imageOffset: new AMap.Pixel(0, -60),
+                    image: "/imgs/people.png",
+
+                })        
         });
-        map.addOverlay(marker);
-        map.setCenter(point);
+        marker.setAnimation('AMAP_ANIMATION_BOUNCE');
+         
+         map.setFitView();
+
+        // map.addOverlay(marker);
+        // map.setCenter(point);
     },
-    reset: function() {
+    reset: function () {
         var vm = this;
         //s:{''只返回找到的结果|all返回所有的} 
         var dd = vm.searchClass(vm.searchData);
         vm.addMarkerHouse(dd); //向地图中添加marker
     },
-    addMarkerHouse: function(data) {
-        var vm = this;
-        map.clearOverlays();
-        console.log(data);
-        vm.showCount(data.length);
-        vm.addMarkerUser();
-        var leng = data.length;
-        for (var i = 0; i < leng; i++) {
-            var json = data[i];
-            var p0 = json.longitude;
-            var p1 = json.latitude;
-            var point = new BMap.Point(p0, p1);
-            let imgSrc = json.image || '/imgs/map_2.svg';
-            var iconImg = new BMap.Icon(imgSrc, new BMap.Size(20, 20));
-            var marker = new BMap.Marker(point, {
-                icon: iconImg
-            });
+    addMarkerHouse: function (data) {
+       var vm = this;
+               
+                map.clearMap();
+
+                var dataleng = data.length;
+
+                var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+
+                for (var i = 0, marker; i < dataleng; i++) {
+                    var json = data[i];
+                    var lnglats = [json.longitude,json.latitude];
+                    var title = json.title;
+                    var iconsrc = json.image || "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png"  ;
+                 
+                    var marker = new AMap.Marker({
+                        map: map,
+                        position: lnglats,
+                        icon: new AMap.Icon({            
+                            size: new AMap.Size(20, 20),  //图标大小
+                            // imageOffset: new AMap.Pixel(0, -60),
+                            image: iconsrc,
+
+                        })        
+                    });
+                    
+                    marker.content = vm.createInfoWindow(json);
+                    marker.on('click', markerClick);
+                    marker.emit('click', {target: marker});
+                    
+                    marker.infojson = json;
+
+                    marker.on('rightclick', function(e) {
+                        console.log(e);
+                        vm.openShopUpdata(e.target.infojson.id);
+                    });
 
 
-            // var label = new BMap.Label(json.title, {
-            //     "offset": new BMap.Size(0, 50)
-            // });
-
-
-            // marker.setLabel(label);
-            map.addOverlay(marker);
-            // label.setStyle({
-            //     borderColor: "#808080",
-            //     color: "#333",
-            //     cursor: "pointer"
-            // });
-
-            (function() {
-                var _json = json;
-                var _iw = vm.createInfoWindow(_json);
-                var _marker = marker;
-                _marker.addEventListener("click", function() {
-                    this.openInfoWindow(_iw);
-                });
-                _iw.addEventListener("open", function() {
-                    // _marker.getLabel().hide();
-                })
-                _iw.addEventListener("close", function() {
-                        // _marker.getLabel().show();
-                    })
-                    // label.addEventListener("click", function() {
-                    //     _marker.openInfoWindow(_iw);
-                    // })
-                if (!!json.is_open) {
-                    // label.hide();
-                    _marker.openInfoWindow(_iw);
                 }
-            })()
-        }
+                function markerClick(e) {
+                    infoWindow.setContent(e.target.content);
+                    infoWindow.open(map, e.target.getPosition());
+                }
+                map.setFitView();
+
+                vm.addMarkerUser();
+                var leng = data.length;
+                vm.showCount(leng);
     },
-    createInfoWindow: function(json) {
+    createInfoWindow: function (json) {
         var stname = json.name ? json.name : "";
         var html = '<b class="iw_poi_title" title="' + json.title + '">' + json.title + '</b><div class="iw_poi_address">' + json.address + '</div><div class="iw_poi_stname">' + stname + '</div>';
-        var iw = new BMap.InfoWindow(html);
-        return iw;
+        
+        return html;
     },
-    statusList: function() {
+    statusList: function () {
         var vm = this;
         var status = vm.status;
         // 状态列表
@@ -203,7 +161,7 @@ window.mapInfoConfig = {
         $(".footer-m-sec").html(ops);
 
     },
-    search: function() {
+    search: function () {
         var vm = this;
         //获取页面dom
         var searchType = vm.type;
@@ -216,7 +174,7 @@ window.mapInfoConfig = {
         var dd = vm.searchClass();
         vm.addMarkerHouse(dd); //向地图中添加marker
     },
-    searchClass: function() {
+    searchClass: function () {
         // rule = {k:"title",d:"酒店",s:"all",t:"single"}=>t{single:(key=?),more:(key like[%?%])}//t:{single|more},s{all|!all}
         // rule = {k:"名字",d:"搜索关键字",t:{single名字精确查找|more名字模糊匹配查找},s{''只返回找到的结果|all返回所有的} 
         var vm = this;
@@ -239,7 +197,7 @@ window.mapInfoConfig = {
         var ruleReg = new RegExp($.trim(rule.d));
         var hasOpen = false;
 
-        var addData = function(data, is_open) {
+        var addData = function (data, is_open) {
             // 第一条数据打开信息窗口
             if (is_open && !hasOpen) {
                 hasOpen = true;
@@ -249,7 +207,7 @@ window.mapInfoConfig = {
             }
             reval.push(data);
         }
-        var getData = function(data, key) {
+        var getData = function (data, key) {
             var ks = $.trim(key).split(/\./);
             var i = null,
                 s = "data";
@@ -277,10 +235,3 @@ window.mapInfoConfig = {
 
     }
 }
-
-
-$(function(){
-     // FastClick.attach(document.body); 
- mapInfoConfig.init();
-  alert("ss");
-})

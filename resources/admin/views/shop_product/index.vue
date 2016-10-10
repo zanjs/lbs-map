@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <bread-crumb :title="title" :paths="breadcrumbs"></bread-crumb>
+        <!--<bread-crumb :title="title" :paths="breadcrumbs"></bread-crumb>-->
 
         <div class=" wrapper wrapper-content animated fadeInRight">
 
@@ -10,8 +10,8 @@
 
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>{{title}}</h5>
-
+                            <h5>{{shopdata.title}} -- {{title}} </h5>
+                            <a v-link="{name:'shop_product_create'}" class="fr">添加</a>
                             <div class="ibox-tools"></div>
                         </div>
                         <div class="ibox-content">
@@ -35,15 +35,25 @@
         </div>
     </div>
 </template>
-
+<style lang="stylus">
+.fr
+    float right
+</style>
 <script>
-    import BreadCrumb from '../partial/bread-crumb';
+
     import DataTable from '../../components/data-table';
     import Pagination from '../../components/pagination';
 
     export default {
         ready: function () {
-            this.getData();
+            let vm = this;
+            this.shop_id = this.$route.params.shopid;
+            this.getShopData().then(function () {
+               
+            });
+
+             vm.getData();
+         
         },
         data: function () {
             return {
@@ -58,27 +68,32 @@
                         url: ''
                     }
                 ],
+                shop_id:"",
+                shopdata:{},
                 page: 1,
                 pageSize: 15,
                 count: 0,
-                data: [],
+                data: [
+
+                ],
                 columns: {
                     id: '#',
-                    name: '名称',
-                    price: '价格',
-                    norm: '规格'
+                    product: ['产品名称', 'name'],
+                    quantity: '数量',
+                    price: '价格'
                 }
 
             }
         },
         components: {
-            'bread-crumb': BreadCrumb,
+
             'data-table': DataTable,
             'pagination': Pagination
         },
         methods: {
             getData: function () {
-                this.$http.get('product', {
+                this.$http.get('shop_product', { 
+                    shop_id : this.shop_id,
                     page: this.page,
                     page_size: this.pageSize
                 }).then(function (result) {
@@ -86,24 +101,45 @@
                     this.data = data.data;
                     this.count = data.count;
                 });
+            },
+            getTest1:function () {
+                console.log(this.shop_id);
+                alert("1");
+            },
+            getShopData: function () {
+                
+                return new Promise(function (resolve, reject) {
+                    this.$http.get('house/' + this.shop_id + '/edit').then(function (result) {
+                        let data = result.data;
+                        if (data.flag == true && data.data) {
+                            this.shopdata = data.data;
+                        }
+                        this.$toast['success'](data.msg);
+                        resolve(result);
+                    }, function (error) {
+                        reject(error);
+                    });
+                }.bind(this));
+          
             }
         },
         events: {
             onEdit: function (id) {
-                this.$route.router.go({name: 'product_edit', params: {id: id}})
+                this.$route.router.go({name: 'shop_product_edit', params: {id: id}})
             },
             onDelete: function (id) {
-                this.$http.delete('product/' + id).then(function (result) {
+              
+             
+                this.$http.delete('shop_product/' + id).then(function (result) {
                     let data = result.data;
                     if (data.flag == true) {
+                        console.log()
                         this.getData();
                     }
                     this.$toast['success'](data.msg);
                 });
-            },
-            onChangePage: function (page) {
-                this.page = page;
-                this.getData();
+
+                return false;
             }
         }
     }

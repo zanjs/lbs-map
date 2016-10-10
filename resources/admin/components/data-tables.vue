@@ -37,6 +37,7 @@
           </td>
           <td>
             <div  class="v-caozuo-d">
+              <a  v-link="{name:'shop_product_index',params: { shopid: row.id.value }}">添加</a>
               <a :class="" v-for="action in actions"
                 @click.prevent="invokeAction(action.name,row.id.value)">{{action.display}}</a>
             </div>
@@ -453,13 +454,16 @@
     a {
       display: inline-block;
       line-height: 26px;
-      &:first-child {
+      &:first-child,&:nth-child(2){
         font-size: 14px;
         color: #FFF;
         background-color: #337ab7;
         padding: 5px 10px;
         margin-bottom: 10px;
         margin-right: 20px;
+      }
+      &:nth-child(3){
+       display:none;
       }
     }
   }

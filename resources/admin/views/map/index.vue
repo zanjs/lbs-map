@@ -15,7 +15,7 @@
                 <thead>
                 <tr>
                    <td>
-                        状态名称
+                       状态名称
                     </td>
                     <td>
                        统计数
@@ -56,6 +56,9 @@
     export default {
         ready: function() {
             let vm = this;
+
+            window.map = new AMap.Map("l-map", {resizeEnable: true});
+
             this.getData().then(function() {
                 vm.getDataCount();
 
@@ -135,6 +138,7 @@
                 statusCount: [],
                 statusname: '',
                 searchData: [],
+                searchType:'title',
                 errors: null
             }
         },
@@ -175,64 +179,44 @@
                 }.bind(this));
             },
             initMap: function(BASEDATA) {
-                let vm = this;
-                let dataleng = BASEDATA.length;
-                console.log(BASEDATA)
-                
-                var map = new AMap.Map("l-map", {resizeEnable: true});
-                var lnglats = [
-                    [116.368904, 39.923423],
-                    [116.382122, 39.921176],
-                    [116.387271, 39.922501],
-                    [116.398258, 39.914600]
-                ];
-                var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
-
-                for (var i = 0, marker; i < dataleng; i++) {
-                    var json = BASEDATA[i];
-                    var lnglats = [json.longitude,json.latitude];
-                    var title = json.title;
-                    var iconsrc = json.status.image || "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png"  ;
-                    console.log(iconsrc);
-                    var marker = new AMap.Marker({
-                        map: map,
-                        position: lnglats,
-                        icon: new AMap.Icon({            
-                            size: new AMap.Size(20, 20),  //图标大小
-                            // imageOffset: new AMap.Pixel(0, -60),
-                            image: iconsrc,
-
-                        })        
-                    });
-                    marker.content = vm.createInfoWindow(json);
-                    marker.on('click', markerClick);
-                    marker.emit('click', {target: marker});
-                    var contextMenu = new AMap.ContextMenu();  //创建右键菜单
-
-                    marker.json = json;
-                        //右键放大
-                    contextMenu.addItem("修改"+ title, function(e) {
-                        console.log(marker)
-                        map.zoomIn();
-                    }, 0);
-
-                        //绑定鼠标右击事件——弹出右键菜单
-                    marker.on('rightclick', function(e) {
-                        contextMenu.open(map, e.lnglat);
-                    });
-
-                }
-                function markerClick(e) {
-                    infoWindow.setContent(e.target.content);
-                    infoWindow.open(map, e.target.getPosition());
-                }
-                map.setFitView();
-
-                
+                let vm = this;                
                 //创建自定义搜索类
-                // window.searchClass = new SearchClass();
-                // searchClass.setData(BASEDATA)
-                // vm.mapDateReset();
+                window.searchClass = new SearchClass();
+                searchClass.setData(BASEDATA)
+                vm.mapDateReset();
+            },
+            createSelectStatus(obj){
+                let vm = this;
+                $(".select-us").remove();
+
+                let selectSta = '';
+
+                let uphouseInfo = obj.target.infojson;
+                let uphouseInfoStc = JSON.stringify(uphouseInfo);
+                let statusList = vm.status;
+                let slen = statusList.length;
+                for (var i = 0; i < slen; i++) {
+                    let isClass = '';
+                    if (statusList[i].id == uphouseInfo.status.id) {
+                        isClass = 'on';
+                    }
+                    selectSta += '<li  class="' + isClass + '" data-id="' + statusList[i].id + '">' + statusList[i].name + '</li>';
+                };
+
+
+
+                let ul = $('<ul></ul>');
+                ul.attr("data-info", uphouseInfoStc)
+                ul.attr("class", "select-us");
+                ul.css({
+                    "top": obj.pixel.y,
+                    "left": obj.pixel.x
+                })
+                ul.html(selectSta);
+                $("body").append(ul);　
+                
+                return false;　
+
             },
             mapDateReset() {
                 let vm = this;
@@ -245,7 +229,7 @@
                     t: "single",
                     s: "all"
                 });
-                vm.addMarker(dd); //向地图中添加marker
+                vm.addMarker(dd); 
             },
             search: function(searchTypeRadio_name, keyword_name) {
                 //搜索方法 param{searchTypeRadio_name：搜索radio的名字,keyword_name:搜索文本框的id}
@@ -278,10 +262,54 @@
                 let stc = '搜索结果总数是:' + leng;
                 $("#count-info").html(stc);
             },
+            openShopUpdata:function(id){
+                window.open("/admin/#!/main/house/edit/"+id);
+            },
             addMarker: function(data) {
                 let vm = this;
-                //创建marker
-                map.clearOverlays();
+               
+                map.clearMap();
+
+                var dataleng = data.length;
+
+                var infoWindow = new AMap.InfoWindow({offset: new AMap.Pixel(0, -30)});
+
+                for (var i = 0, marker; i < dataleng; i++) {
+                    var json = data[i];
+                    var lnglats = [json.longitude,json.latitude];
+                    var title = json.title;
+                    var iconsrc = json.status.image || "http://webapi.amap.com/theme/v1.3/images/newpc/way_btn2.png"  ;
+                 
+                    var marker = new AMap.Marker({
+                        map: map,
+                        position: lnglats,
+                        icon: new AMap.Icon({            
+                            size: new AMap.Size(20, 20),  //图标大小
+                            // imageOffset: new AMap.Pixel(0, -60),
+                            image: iconsrc,
+
+                        })        
+                    });
+                    
+                    marker.content = vm.createInfoWindow(json);
+                    marker.on('click', markerClick);
+                    marker.emit('click', {target: marker});
+                    
+                    marker.infojson = json;
+
+                    marker.on('rightclick', function(e) {
+                        console.log(e);
+                        vm.openShopUpdata(e.target.infojson.id);
+                    });
+
+
+                }
+                function markerClick(e) {
+                    infoWindow.setContent(e.target.content);
+                    infoWindow.open(map, e.target.getPosition());
+                }
+                map.setFitView();
+
                 vm.countInfo(data);
                 let leng = data.length;
               
@@ -316,7 +344,8 @@
         }
     };
 
-    window.uMapConfig = {
+
+     window.uMapConfig = {
         k: "title",
         status: '',
     };
@@ -389,4 +418,5 @@
         }
         return str.replace(/(^[\s\t\xa0\u3000]+)|([\u3000\xa0\s\t]+$)/g, "");
     }
+    
 </script>

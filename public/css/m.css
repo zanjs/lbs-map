@@ -41,3 +41,14 @@ body {
     background-color: rgba(122,166,233,0.9);
     color: #FFF;
 }
+#tip{
+    position: absolute; 
+    padding: 10px;
+    right: 0;
+    top: 0;
+    background-color: rgba(122,166,233,0.5);
+    color: #FFF;
+}
+#m-map .amap-logo,#m-map .amap-copyright,.amap-geolocation-con{
+    display: none!important;
+}

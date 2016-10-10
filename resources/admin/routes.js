@@ -31,6 +31,9 @@ import ProductIndexComponent from './views/product/index';
 import ProductCreateComponent from './views/product/create';
 import ProductEditComponent from './views/product/edit';
 
+import ShopProductIndexComponent from './views/shop_product/index';
+import ShopProductCreateComponent from './views/shop_product/create';
+import ShopProductEditComponent from './views/shop_product/edit';
 
 
 
@@ -141,6 +144,18 @@ export default function routeConfig(router) {
                 '/product/edit/:id': {
                     name: 'product_edit',
                     component: ProductEditComponent
+                },
+                '/shop_product/:shopid': {
+                    name: 'shop_product_index',
+                    component: ShopProductIndexComponent
+                },
+                '/shop_product/create/:shopid': {
+                    name: 'shop_product_create',
+                    component: ShopProductCreateComponent
+                },
+                '/shop_product/edit/:shopid/:id': {
+                    name: 'shop_product_edit',
+                    component: ShopProductEditComponent
                 },
                 //status
                 '/comment/index': {

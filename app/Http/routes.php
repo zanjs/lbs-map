@@ -87,6 +87,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'backend','middleware'=>'api
         Route::resource('city', 'CityController');
         Route::resource('house', 'HouseController');
         Route::resource('product', 'ProductController');
+        Route::resource('shop_product', 'ShopProductController');
         Route::resource('user', 'UserController');
         Route::resource('tag', 'TagController');
         Route::resource('comment', 'CommentController');

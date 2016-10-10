@@ -759,42 +759,7 @@ if (typeof define !== 'undefined' && define.amd) {
 } else {
     window.FastClick = FastClick;
 };
-(function(){        //闭包
-function load_script(xyUrl, callback){
-    var head = document.getElementsByTagName('head')[0];
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = xyUrl;
-    //借鉴了jQuery的script跨域方法
-    script.onload = script.onreadystatechange = function(){
-        if((!this.readyState || this.readyState === "loaded" || this.readyState === "complete")){
-            callback && callback();
-            // Handle memory leak in IE
-            script.onload = script.onreadystatechange = null;
-            if ( head && script.parentNode ) {
-                head.removeChild( script );
-            }
-        }
-    };
-    // Use insertBefore instead of appendChild  to circumvent an IE6 bug.
-    head.insertBefore( script, head.firstChild );
-}
-function translate(point,type,callback){
-    var callbackName = 'cbk_' + Math.round(Math.random() * 10000);    //随机函数名
-    var xyUrl = "http://api.map.baidu.com/ag/coord/convert?from="+ type + "&to=4&x=" + point.lng + "&y=" + point.lat + "&callback=BMap.Convertor." + callbackName;
-    //动态创建script标签
-    load_script(xyUrl);
-    BMap.Convertor[callbackName] = function(xyResult){
-        delete BMap.Convertor[callbackName];    //调用完需要删除改函数
-        var point = new BMap.Point(xyResult.x, xyResult.y);
-        callback && callback(point);
-    }
-}
 
-window.BMap = window.BMap || {};
-BMap.Convertor = {};
-BMap.Convertor.translate = translate;
-})();
 
 
 $(document).ready(function() {
@@ -806,14 +771,46 @@ $(document).ready(function() {
         lat: 31.253715,
         lng: 121.414496
     };
-    window.map = new BMap.Map("m-map");
-    /*h5获取地理位置*/
-    // if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(showPosition);
-    // } else {
-    //     alert("未收到gps地址")
-    // };
-    showPosition(defpoint)
+    
+
+
+    window.map, window.geolocation;
+    //加载地图，调用浏览器定位服务
+    
+    map = new AMap.Map('m-map', { resizeEnable: true});
+
+    // window.map = new AMap.Map("l-map", {resizeEnable: true});
+    map.plugin('AMap.Geolocation', function() {
+        geolocation = new AMap.Geolocation({
+            enableHighAccuracy: true,//是否使用高精度定位，默认:true
+            timeout: 10000,          //超过10秒后停止定位，默认：无穷大
+            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+            zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+            buttonPosition:'RB'
+        });
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition();
+        AMap.event.addListener(geolocation, 'complete', onComplete);//返回定位信息
+        AMap.event.addListener(geolocation, 'error', onError);      //返回定位出错信息
+    });
+    //解析定位结果
+    function onComplete(data) {
+        var str=['定位成功'];
+        str.push('经度：' + data.position.getLng());
+        str.push('纬度：' + data.position.getLat());
+        str.push('精度：' + data.accuracy + ' 米');
+        str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
+        document.getElementById('tip').innerHTML = str.join('<br>');
+        var position = {
+            latitude:data.position.getLat(),
+            longitude:data.position.getLng()
+        }
+        showPosition(position);
+    }
+    //解析定位错误信息
+    function onError(data) {
+        document.getElementById('tip').innerHTML = '定位失败';
+    }
 
     FastClick.attach(document.body);
 
@@ -821,20 +818,11 @@ $(document).ready(function() {
 
 
 function showPosition(position) {
-    var lat = position.coords.latitude;
-    var lng = position.coords.longitude;
-    var gpsPoint = new BMap.Point(lng, lat);
-    // 地图初始化
-    map.centerAndZoom(gpsPoint, 13);
-    // 标记
-    var marker = new BMap.Marker(gpsPoint);
-    map.addOverlay(marker);
-    map.addControl(new BMap.NavigationControl());
-    setTimeout(function() {
-        BMap.Convertor.translate(gpsPoint, 0, translateCallback); //真实经纬度转成百度坐标
-    }, 100);
-    //坐标转换完之后的回调函数
-    translateCallback = function(point) {
-        mapInfoConfig.translateCallback(point);
+    var lat = position.latitude;
+    var lng = position.longitude;
+    var point = {
+        lat:lat,
+        lng:lng
     }
+    mapInfoConfig.translateCallback(point);
 };

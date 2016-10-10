@@ -14,7 +14,7 @@ class ShopProduct extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['shop_id','flag','condition','product_id','price','quantity'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -28,8 +28,13 @@ class ShopProduct extends Model
 
    
 
-    public function status()
+    public function product()
     {
-        return $this->belongsTo('App\Status', 'parent_id', 'id');
+        return $this->belongsTo('App\Product', 'product_id', 'id');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo('App\House', 'shop_id', 'id');
     }
 }
