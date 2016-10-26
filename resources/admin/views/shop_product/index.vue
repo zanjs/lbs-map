@@ -1,8 +1,5 @@
 <template>
     <div>
-
-        <!--<bread-crumb :title="title" :paths="breadcrumbs"></bread-crumb>-->
-
         <div class=" wrapper wrapper-content animated fadeInRight">
 
             <div class="row">
@@ -10,109 +7,103 @@
 
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>{{shopdata.title}} -- {{title}} </h5>
-                            <a v-link="{name:'shop_product_create'}" class="fr">添加</a>
-                            <div class="ibox-tools"></div>
+                            <h5>{{shop.title}} -- {{title}} </h5>
+                            
+                            <div class="ibox-tools">
+                               
+                            </div>
                         </div>
                         <div class="ibox-content">
-
-                            <data-table :data="data" :columns="columns"></data-table>
-
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="pull-right">
-                                        <pagination :count="count" :page="page" :page-size="pageSize"></pagination>
-                                    </div>
-                                </div>
+                            <div class="product-count">
+                                <span class="sp1">
+                                    补货 {{addUp}}
+                                </span>
+                                <span  class="sp1">
+                                    结账 {{outUp}}
+                                </span>
+                            </div>
+                            <div v-for="product in products">
+                            <div class="flex-container">
+                                <span class="flex-1">
+                                    <a class="is-click"  @click="addProduct($index,product)"> 
+                                        <i class="fa fa-plus" aria-hidden="true"></i> 
+                                        <i v-if="product.add">{{ product.add }}</i>
+                                    </a>
+                                </span>
+                                <span class="flex-1">
+                                    {{ product.name }}
+                                </span>
+                                <span class="flex-1">
+                                    {{ product.price }}
+                                </span>
+                                <span class="flex-1">
+                                    <a  class="is-click" @click="outProduct($index,product)">
+                                        <i class="fa fa-chain-broken" aria-hidden="true"></i>
+                                        <i v-if="product.out"> {{ product.out }} </i>
+                                    </a>
+                                </span>
+                            </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
-
+                <div class="col-lg-12 col-sm-4 col-sm-offset-2">
+                    <button type="button" class="btn btn-primary" @click="saveFrom" >
+                        保存
+                    </button>
+                </div>
             </div>
 
         </div>
     </div>
 </template>
-<style lang="stylus">
-.fr
-    float right
-</style>
 <script>
-
-    import DataTable from '../../components/data-table';
-    import Pagination from '../../components/pagination';
+    import Product from './product';
 
     export default {
         ready: function () {
             let vm = this;
             this.shop_id = this.$route.params.shopid;
-            this.getShopData().then(function () {
-               
+            this.getProductData().then(function () {
             });
-
-             vm.getData();
          
         },
         data: function () {
             return {
                 title: '产品列表',
-                breadcrumbs: [
-                    {
-                        name: '首页',
-                        url: ''
-                    },
-                    {
-                        name: '产品列表',
-                        url: ''
-                    }
-                ],
-                shop_id:"",
-                shopdata:{},
+                addUp:0,
+                outUp:0,
+                products:[],
+                shop:{},
                 page: 1,
                 pageSize: 15,
                 count: 0,
-                data: [
-
-                ],
-                columns: {
-                    id: '#',
-                    product: ['产品名称', 'name'],
-                    quantity: '数量',
-                    price: '价格'
-                }
-
+                data: []
             }
         },
-        components: {
-
-            'data-table': DataTable,
-            'pagination': Pagination
+        watch: {
+            products: {
+                handler: function (products) {
+                    this.addUpFn();
+                },
+                deep: true
+            }
+        },
+       components: {
+            'product': Product
         },
         methods: {
-            getData: function () {
-                this.$http.get('shop_product', { 
-                    shop_id : this.shop_id,
-                    page: this.page,
-                    page_size: this.pageSize
-                }).then(function (result) {
-                    let data = result.data;
-                    this.data = data.data;
-                    this.count = data.count;
-                });
-            },
-            getTest1:function () {
-                console.log(this.shop_id);
-                alert("1");
-            },
-            getShopData: function () {
-                
+            getProductData: function (){
+                let vm = this;
                 return new Promise(function (resolve, reject) {
-                    this.$http.get('house/' + this.shop_id + '/edit').then(function (result) {
+                    this.$http.get('product_shop/' + this.shop_id).then(function (result) {
                         let data = result.data;
-                        if (data.flag == true && data.data) {
-                            this.shopdata = data.data;
+                        if (data.flag == true) {
+                            this.products = data.products;
+                            this.shop = data.shop;
+                            vm.dealWith(data.products,data.shop);
+                            console.log(data)
                         }
                         this.$toast['success'](data.msg);
                         resolve(result);
@@ -120,7 +111,78 @@
                         reject(error);
                     });
                 }.bind(this));
-          
+
+            },
+            dealWith: function (products,shop) {
+                let vm = this;
+                let leng = products.length;
+                console.log(products)
+                let newProducts = [];
+                for(var i= 0 ; i< leng ;i ++){
+                    let item = products[i];
+                    item.add = 0;
+                    item.out = 0;
+                    console.log(item); 
+                    newProducts.push(item);
+                }
+                vm.products = newProducts;
+            },
+            comSetProduct:function(product){
+                return {
+                   add:product.add,
+                   out:product.out,
+                   price:product.price,
+                   name:product.name 
+                }
+            },
+            addProduct:function (index,product){
+                let pro = this.products[index];
+                let newPro = this.comSetProduct(pro);
+                newPro.add = newPro.add +1;
+                this.products.$set(index,newPro); 
+            },
+            outProduct:function (index,product){
+                let pro = this.products[index];
+                let newPro = this.comSetProduct(pro);
+                newPro.out = newPro.out +1;
+                this.products.$set(index,newPro); 
+            },
+            addUpFn:function(){
+                let vm = this;
+                let products = vm.products;
+                let leng = products.length;
+                console.log(leng);
+                let addPrice = 0;
+                for(var i=0;i<leng;i++){
+                    addPrice += products[i].add * products[i].price;
+                }
+
+                vm.addUp = addPrice;
+            },
+            outUpFn:function(){
+                let vm = this;
+                let products = vm.products;
+                let leng = products.length;
+           
+                let addPrice = 0;
+                for(var i=0;i<leng;i++){
+                    addPrice += products[i].out * products[i].price;
+                }
+
+                vm.outUp = addPrice;
+            },
+            saveFrom:function(){
+                let vm = this;
+                let pros = vm.products;
+                let leng = pros.length;
+                let arr = [];
+
+                for(var i=0;i<leng;i++){
+                    arr.push(vm.comSetProduct(pros[i]));
+                }
+
+                console.log(arr);
+
             }
         },
         events: {
@@ -128,8 +190,6 @@
                 this.$route.router.go({name: 'shop_product_edit', params: {id: id}})
             },
             onDelete: function (id) {
-              
-             
                 this.$http.delete('shop_product/' + id).then(function (result) {
                     let data = result.data;
                     if (data.flag == true) {
@@ -144,3 +204,18 @@
         }
     }
 </script>
+<style lang='stylus'>
+.product-count
+    display: flex
+    flex: 1
+    .sp1
+        flex: 1
+.flex-container
+    display: flex
+    .flex-1
+        margin:10px 0
+        -webkit-flex: initial
+        flex: initial
+        width: 200px
+        min-width: 80px
+</style>

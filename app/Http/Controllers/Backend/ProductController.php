@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Product;
+use App\House;
 use Validator;
 
 class ProductController extends Controller
@@ -70,6 +71,25 @@ class ProductController extends Controller
     public function show($id)
     {
         //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function shop($id)
+    {
+        $shop = House::find($id);
+        $product = Product::all();
+
+        if (!$product) {
+            return response()->json(['flag' => false, 'msg' => '数据获取失败']);
+        }
+
+        return response()->json(['flag'=> true, 'msg' => '获取数据成功','shop' => $shop ,'products' => $product]);
+
     }
 
     /**

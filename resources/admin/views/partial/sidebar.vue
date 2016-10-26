@@ -101,7 +101,7 @@
                     </a>
                     <ul class="nav nav-second-level">
                         <li><a v-link="{name:'mappc'}">地图管理</a></li>
-                        <li><a href="/m.html">手机地图</a></li>
+                        <li><a href="/amap.html">手机地图</a></li>
         
                     </ul>
                 </li>

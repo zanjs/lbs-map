@@ -22,6 +22,7 @@ class CreateHousesTable extends Migration
             $table->boolean('is_open')->default(0);
             $table->string('latitude');
             $table->string('longitude');
+            $table->string('products');
             $table->string('address');
             $table->longText('content');
             $table->string('image')->nullable();
