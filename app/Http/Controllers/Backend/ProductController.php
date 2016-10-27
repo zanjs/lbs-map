@@ -87,10 +87,33 @@ class ProductController extends Controller
         if (!$product) {
             return response()->json(['flag' => false, 'msg' => '数据获取失败']);
         }
-
         return response()->json(['flag'=> true, 'msg' => '获取数据成功','shop' => $shop ,'products' => $product]);
 
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function saveProduct(Request $request, $id)
+    {
+        $shop = House::find($id);
+        
+        if (!$shop) {
+            return response()->json(['flag' => false, 'msg' => '数据获取失败']);
+        }
+
+        $products = $request->get('products', 0);
+        $shop->products = $products;
+
+        $shop->save();
+
+        return response()->json(['flag'=> true, 'msg' => '获取数据成功','shop' => $products]);
+
+    }
+
 
     /**
      * Show the form for editing the specified resource.

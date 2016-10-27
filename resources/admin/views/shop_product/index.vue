@@ -116,13 +116,27 @@
             dealWith: function (products,shop) {
                 let vm = this;
                 let leng = products.length;
-                console.log(products)
+                let shopProduct = JSON.parse(shop.products);
+                let shopProductLeng = shopProduct.length;
+                console.log(shopProduct);
                 let newProducts = [];
                 for(var i= 0 ; i< leng ;i ++){
                     let item = products[i];
                     item.add = 0;
                     item.out = 0;
                     console.log(item); 
+
+                    for(var j=0;j<shopProductLeng;j++){
+                        var jItem = shopProduct[j];
+                        console.log(jItem);
+                        if(jItem.id == item.id){
+                            item.out = jItem.out;
+                        }
+
+                    }
+                    
+
+
                     newProducts.push(item);
                 }
                 vm.products = newProducts;
@@ -132,6 +146,7 @@
                    add:product.add,
                    out:product.out,
                    price:product.price,
+                   id:product.id,
                    name:product.name 
                 }
             },
@@ -181,8 +196,19 @@
                     arr.push(vm.comSetProduct(pros[i]));
                 }
 
-                console.log(arr);
+                
 
+                let products = {
+                    products:JSON.stringify(arr)
+                }
+
+                this.$http.put('product_shop/' + this.shop_id, products).then(function (result) {
+                    let data = result.data;
+                    if (data.errors) {
+                        this.errors = data.errors;
+                    }
+                    console.log(data);
+                });
             }
         },
         events: {
