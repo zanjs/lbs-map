@@ -34,12 +34,15 @@
                                     {{ product.name }}
                                 </span>
                                 <span class="flex-1">
-                                    {{ product.price }}
+                                    {{ product.price }} /{{ product.norm }}
+                                </span>
+                                <span class="flex-1">
+                                    {{ product.reserve }} 
                                 </span>
                                 <span class="flex-1">
                                     <a  class="is-click" @click="outProduct($index,product)">
                                         <i class="fa fa-chain-broken" aria-hidden="true"></i>
-                                        <i v-if="product.out"> {{ product.out }} </i>
+                                        <i v-if="product.out">- {{ product.out }} </i>
                                     </a>
                                 </span>
                             </div>
@@ -86,6 +89,7 @@
             products: {
                 handler: function (products) {
                     this.addUpFn();
+                    this.outUpFn();
                 },
                 deep: true
             }
@@ -116,26 +120,26 @@
             dealWith: function (products,shop) {
                 let vm = this;
                 let leng = products.length;
-                let shopProduct = JSON.parse(shop.products);
+                console.log(shop.products);
+                let shopProduct = shop.products ? JSON.parse(shop.products) : [];
                 let shopProductLeng = shopProduct.length;
-                console.log(shopProduct);
+                
                 let newProducts = [];
                 for(var i= 0 ; i< leng ;i ++){
                     let item = products[i];
                     item.add = 0;
                     item.out = 0;
+                    item.reserve = 0;
                     console.log(item); 
 
                     for(var j=0;j<shopProductLeng;j++){
                         var jItem = shopProduct[j];
                         console.log(jItem);
                         if(jItem.id == item.id){
-                            item.out = jItem.out;
+                            jItem.reserve ? item.reserve = jItem.reserve:"";
                         }
 
                     }
-                    
-
 
                     newProducts.push(item);
                 }
@@ -146,21 +150,34 @@
                    add:product.add,
                    out:product.out,
                    price:product.price,
+                   reserve:product.reserve,
+                   norm:product.norm,
                    id:product.id,
                    name:product.name 
                 }
+            },
+            updateReserve:function(index,product,num){
+                let pro = this.products[index];
+                let newPro = this.comSetProduct(pro);
+                newPro.reserve = newPro.reserve +num;
+                this.products.$set(index,newPro); 
             },
             addProduct:function (index,product){
                 let pro = this.products[index];
                 let newPro = this.comSetProduct(pro);
                 newPro.add = newPro.add +1;
+                newPro.reserve = newPro.reserve +1;
                 this.products.$set(index,newPro); 
             },
             outProduct:function (index,product){
                 let pro = this.products[index];
                 let newPro = this.comSetProduct(pro);
-                newPro.out = newPro.out +1;
-                this.products.$set(index,newPro); 
+                if(newPro.reserve > 0){
+                    newPro.out = newPro.out +1;
+                    newPro.reserve = newPro.reserve -1;
+                    this.products.$set(index,newPro); 
+                }
+                
             },
             addUpFn:function(){
                 let vm = this;

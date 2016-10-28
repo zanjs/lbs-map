@@ -110,7 +110,7 @@ class ProductController extends Controller
 
         $shop->save();
 
-        return response()->json(['flag'=> true, 'msg' => '获取数据成功','shop' => $products]);
+        return response()->json(['flag'=> true, 'msg' => '更新成功','shop' => $products]);
 
     }
 

@@ -15,6 +15,7 @@ class CreateHousesTable extends Migration
         Schema::create('houses', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('city_id')->unsigned();
+            $table->integer('flag')->default(0);
             $table->string('title');
             $table->string('number');
             $table->text('description');
@@ -22,7 +23,7 @@ class CreateHousesTable extends Migration
             $table->boolean('is_open')->default(0);
             $table->string('latitude');
             $table->string('longitude');
-            $table->string('products');
+            $table->longText('products');
             $table->string('address');
             $table->longText('content');
             $table->string('image')->nullable();

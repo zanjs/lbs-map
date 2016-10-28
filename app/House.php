@@ -15,7 +15,7 @@ class House extends Model
     /**
      * @var array
      */
-    protected $fillable = ['city_id', 'title', 'content', 'number','description','status_id', 'address','latitude','longitude' ,'geohash','image', 'visible'];
+    protected $fillable = ['city_id', 'title', 'content', 'number','description','status_id', 'address','latitude','longitude' ,'geohash','image', 'visible','flag','products'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -64,7 +64,7 @@ class House extends Model
      */
     public function scopeLatest($query)
     {
-        return $query->orderBy('updated_at', 'desc');
+        return $query->orderBy('flag','number','updated_at', 'desc');
     }
 
 }

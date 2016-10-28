@@ -103,6 +103,28 @@ class HouseController extends Controller
         //
     }
 
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function flag($id)
+    {
+        $shop = House::find($id);
+        if (!$shop) {
+            return response()->json(['flag' => false, 'msg' => '更新失败']);
+        }
+        $flag = $shop->flag;
+        $shop->flag = $flag+1;
+
+        $shop->save();
+
+        return response()->json(['flag'=> true, 'msg' => '更新成功','shop' => $shop->flag]);
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
