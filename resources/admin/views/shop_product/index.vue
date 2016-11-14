@@ -109,7 +109,7 @@
                             vm.dealWith(data.products,data.shop);
                             console.log(data)
                         }
-                        this.$toast['success'](data.msg);
+                        // this.$toast['success'](data.msg);
                         resolve(result);
                     }, function (error) {
                         reject(error);

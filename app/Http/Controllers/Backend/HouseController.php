@@ -28,7 +28,7 @@ class HouseController extends Controller
         // $current_page = $request->input('page', 1);
         // $page_size = $request->input('page_size', 15);
         // $houses = House::with('city','status')->forPage($current_page, $page_size)->get();
-        $houses = House::with('city','status')->get();
+        $houses = House::with('city','status')->orderBy('flag','number','updated_at','desc')->get();
         $count = House::count();
         return response()->json(['flag' => true, 'data' => $houses, 'count' => $count]);
     }
@@ -117,12 +117,13 @@ class HouseController extends Controller
             return response()->json(['flag' => false, 'msg' => '更新失败']);
         }
         $flag = $shop->flag;
-        $shop->flag = $flag+1;
+        $shop->flag = !$flag;
 
-        $shop->save();
-
-        return response()->json(['flag'=> true, 'msg' => '更新成功','shop' => $shop->flag]);
-
+        if($shop->save()){
+             return response()->json(['flag'=> true, 'msg' => '更新成功','shop' => $shop->flag]);
+        }
+        
+        return response()->json(['flag' => false, 'msg' => '更新失败']);
     }
 
     /**
