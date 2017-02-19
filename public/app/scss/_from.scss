@@ -1,0 +1,29 @@
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #FFF;
+}
+
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+    color: #FFF;
+}
+
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+    color: #FFF;
+}
+
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+    color: #FFF;
+}
+
+input {
+    border: none;
+    background-color: transparent;
+}
+
+input,
+textarea:focus {
+    outline: none;
+}

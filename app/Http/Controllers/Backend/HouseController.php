@@ -13,7 +13,7 @@ use App\City;
 use App\Tag;
 use App\Status;
 
-
+use App\Helpers\Geohash;
 
 class HouseController extends Controller
 {
@@ -98,18 +98,6 @@ class HouseController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
     public function flag($id)
     {
         $shop = House::find($id);
@@ -123,6 +111,39 @@ class HouseController extends Controller
              return response()->json(['flag'=> true, 'msg' => '更新成功','shop' => $shop->flag]);
         }
         
+        return response()->json(['flag' => false, 'msg' => '更新失败']);
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function location(Request $request,$id)
+    {
+        $shop = House::find($id);
+        if (!$shop) {
+            return response()->json(['flag' => false, 'msg' => '更新失败']);
+        }
+        $latitude = $request->get('latitude', 0);
+        $longitude = $request->get('longitude', 0);
+
+        if(!$latitude || !$longitude){
+            return response()->json(['flag' => false, 'msg' => '更新失败']);
+        }
+
+        $geohash = new Geohash;
+        $geohash_val = $geohash->encode($latitude,$longitude);
+
+        $shop->geohash = $geohash_val;
+        $shop->latitude = $latitude;
+        $shop->longitude = $longitude;
+
+        if($shop->save()){
+             return response()->json(['flag'=> true, 'msg' => '更新成功','shop' => $shop]);
+        }
+      
         return response()->json(['flag' => false, 'msg' => '更新失败']);
     }
 

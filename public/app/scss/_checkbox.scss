@@ -1,0 +1,33 @@
+.jui-checkbox + label {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    cursor: pointer;
+    vertical-align: middle;
+    position: relative;
+    &:before {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        position: relative;
+
+        width: 18px;
+        height: 18px;
+        border-radius: 3px;
+        border:2px solid $color;
+        background: #fff;
+    }
+}
+
+.jui-checkbox:checked + label {
+    &:before {
+        background: $color;
+    }
+   
+}
+
+.jui-checkbox:checked[disabled] + label {
+    &:before {
+        background: rebeccapurple;
+    }
+}

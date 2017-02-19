@@ -1,0 +1,66 @@
+.shop-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    &>div {
+        background: #FFF;
+        margin: 3px 0;
+        padding: 4px;
+        padding-right: 36px;
+        position: relative;
+    }
+    .jui-radio,
+    .jui-checkbox {
+        position: absolute;
+        display: none;
+    }
+    .shop-list-title{
+        a{
+            color: #333;
+            text-decoration: none;
+        }
+    }
+    .shop-list-top{
+        width: 26px;
+        height: 26px;
+        text-align: center;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        margin-top: -11px;
+        &.click-top{
+            .fa{
+                color: sandybrown;
+            }
+        }
+        
+        
+    }
+}
+.hidden{
+    display: none;
+}
+
+.getLoading{
+    position: absolute;
+    z-index: 10;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0, .5);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 60px 60px;
+    background-image: url(/app/assets/img/gps.svg);
+    .loading-text{
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+        color: #FFF;
+        padding: 20px;
+    }
+}

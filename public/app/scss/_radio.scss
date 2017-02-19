@@ -1,0 +1,33 @@
+.jui-radio + label {
+    &:before {
+        content: '';
+        border-radius: 50%;
+    }
+    &:after {
+        content: '';
+        top: 3px;
+        left: 3px;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: #3986b0;
+    }
+}
+
+.jui-radio:checked + label {
+    &:before {
+        border: 3 solid #fff;
+    }
+    &:after {
+        background: #f35d5d;
+    }
+}
+
+.jui-radio:checked[disabled] + label {
+    &:before {
+        border: 3 solid #efe;
+    }
+    &:after {
+        background: #efe;
+    }
+}

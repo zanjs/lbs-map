@@ -1,0 +1,117 @@
+i {
+    font-style: inherit;
+}
+
+.flag_true{
+    .fa{
+        color: #5cb85f;
+        font-size: 20px;
+    }
+}
+.shop_product {
+    background-color: rgb(239, 239, 239);
+    position: relative;
+}
+
+.shop_product_header {
+    position: relative;
+    text-align: center;
+    height: 36px;
+    line-height: 36px;
+    background-color: rgba(255, 255, 255, .8);
+    .shop_black_btn,
+    .shop_product_top {
+        position: absolute;
+        width: 36px;
+        height: 36px;
+        text-align: center;
+        vertical-align: middle;
+    }
+}
+
+.shop_product_main {
+    min-height: 200px;
+    padding: 20px 0;
+    background-color: #F4F3F1;
+}
+
+.product-count {
+    .sp1 {
+        width: 50%;
+        text-align: center;
+        margin: 10px;
+        color: #648864;
+        font-size: 18px;
+    }
+}
+
+.flex-container {
+
+   table{
+       width: 100%;
+       border-top: 1px solid #D7D6D4;
+       td{
+           padding: 10px 0;
+           color: #A7A7A7;
+           border-bottom: 1px solid #D7D6D4;
+       }
+   }
+   .td1{
+       position: relative;
+       padding-left: 10px;
+       padding-right: 14px;
+       .number{
+           position: absolute;
+           top: 2px;
+           right: 10px; 
+       }
+   }
+   .number{
+       color: #648864;
+   }
+   .td4{
+       padding: 0 10px;
+       color: #648864;
+   }
+   .td5{
+       position: relative;
+       padding-right: 14px;
+       .number{
+           position: absolute;
+           top: 2px;
+           right: 10px;
+       }
+   }
+}
+
+.flex-1 {
+    margin: 10px 0
+}
+
+.jui-btn{
+    display: block;
+    margin: 10px auto;
+    width: 80%;
+    border: none;
+    padding: 10px;
+    color: #FFF;
+    background-color: #648864;
+}
+
+.product-time{
+    text-align: right;
+    padding: 20px;
+    color: #A7A7A7;
+}
+
+.shop_product_footer{
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #FFF;
+    border-top: 1px solid #D7D6D4;
+}

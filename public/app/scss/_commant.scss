@@ -1,0 +1,36 @@
+html,body{
+    height: 100%;
+}
+#app,#app-box,.shop_product{
+    height: 100%;
+    overflow:auto;
+}
+body{
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    min-width: 320px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: PingHei,PingFang SC,Microsoft Yahei,Helvetica Neue,Helvetica,STHeitiSC-Light,Arial,sans-serif;
+    opacity: 1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center center;
+    background-color: $color2;
+    background-image: url(/app/assets/img/5.jpg);
+}
+
+.fl{
+    float: left;
+}
+.fr{
+    float: right;
+}
+.left_0{
+    left: 0;
+}
+.right_0{
+    right: 0;
+}

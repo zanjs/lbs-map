@@ -1,0 +1,26 @@
+.shop-main {
+    padding: 5px;
+    color: #FFF;
+}
+
+.shop-search {
+    position: relative;
+    background: rgb(92, 184, 95);
+    .shop-add-btn{
+        position: absolute;
+        height: 36px;
+        width: 36px;
+        text-align: center;
+        line-height: 36px;
+    }
+    input {
+        color: #FFF;
+        height: 36px;
+        line-height: 36px;
+    }
+}
+
+.shop-searchbar {
+    padding: 0 36px
+}
+

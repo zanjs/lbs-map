@@ -86,6 +86,7 @@ Route::group(['namespace' => 'Backend', 'prefix' => 'backend','middleware'=>'api
         Route::resource('admin', 'AdminController');
         Route::resource('city', 'CityController');
         Route::resource('house', 'HouseController');
+        Route::put('location/{id}', 'HouseController@location');
         Route::resource('product', 'ProductController');
         Route::get('product_shop/{id}', 'ProductController@shop');
         Route::put('product_shop/{id}', 'ProductController@saveProduct');
