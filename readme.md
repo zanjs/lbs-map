@@ -1,5 +1,7 @@
 ## 本地运行
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/zanjs/lbs-map.svg)](https://greenkeeper.io/)
+
 
 ```
 composer install
